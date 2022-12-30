@@ -12,6 +12,10 @@
   import NotFound from '$routes/NotFound.svelte';
 
   beforeUpdate(() => {
+    window.matchMedia('(prefers-color-scheme: light)').matches
+      ? darkMode.set(false)
+      : darkMode.set(true);
+
     $darkMode === false
       ? document.documentElement.setAttribute('theme', 'white')
       : document.documentElement.setAttribute('theme', 'g90');

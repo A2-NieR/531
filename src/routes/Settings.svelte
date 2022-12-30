@@ -1,11 +1,12 @@
 <script lang="ts">
   import {
-    displayTimer,
     deadlifts,
     squats,
     benchpress,
     overheadpress,
-    timer
+    countdown,
+    countdownReset,
+    displayTimer
   } from '$lib/stores';
   import {
     Button,
@@ -15,6 +16,7 @@
     TextInput
   } from 'carbon-components-svelte';
   import Edit from 'carbon-icons-svelte/lib/Edit.svelte';
+  import Timer from 'carbon-icons-svelte/lib/Timer.svelte';
 
   let headers = [
     { key: 'exercise', value: 'Exercise' },
@@ -92,15 +94,8 @@
   secondaryButtonText="Cancel"
   on:click:button--primary={() => saveWeight(currentExercise)}
   on:click:button--secondary={() => (open = false)}
-  >{modalContent}<TextInput
-    size="xl"
-    type="number"
-    bind:value={currentWeight}
-  />{currentWeight}
-  <p>{$deadlifts}</p>
-  <p>{$squats}</p>
-  <p>{$benchpress}</p>
-  <p>{$overheadpress}</p>
+  ><p class="modal-content">{modalContent}</p>
+  <TextInput size="xl" type="number" bind:value={currentWeight} />
 </Modal>
 
 <DataTable zebra {headers} {rows}>
@@ -127,14 +122,30 @@
   min={60}
   max={180}
   maxLabel="180s"
-  bind:value={$timer}
+  bind:value={$countdown}
   step={15}
   hideTextInput
   fullWidth
 />
 
+<div class="timer-form">
+  <Button icon={Timer} on:click={() => ($countdownReset = $countdown)}
+    >Set Timer</Button
+  >
+  <TextInput disabled placeholder={displayTimer($countdownReset)} size="xl" />
+</div>
+
 <style>
   h3 {
     margin-bottom: 2rem;
+  }
+  .timer-form {
+    margin: 0 2rem;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1rem;
+  }
+  .modal-content {
+    margin: 1rem 0 2rem;
   }
 </style>

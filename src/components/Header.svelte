@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { displayTimer, timer } from '$lib/stores';
+  import { displayTimer, countdown, countdownReset } from '$lib/stores';
   import {
     Header,
     HeaderGlobalAction,
@@ -23,12 +23,25 @@
 
   const closeSidebar = () => (isSideNavOpen = false);
 
-  const startCountdown = () => console.log('Start');
-  const pauseCountdown = () => console.log('Pause');
-  const resetCountdown = () => console.log('Reset');
+  let intervalId: string | number | NodeJS.Timer;
+
+  const startTimer = () => $countdown--;
+
+  const startCountdown = () => (intervalId = setInterval(startTimer, 1000));
+  const pauseCountdown = () => {
+    if (intervalId) {
+      clearInterval(intervalId);
+    }
+  };
+  const resetCountdown = () => {
+    if (intervalId) {
+      clearInterval(intervalId);
+    }
+    $countdown = $countdownReset;
+  };
 </script>
 
-<Header platformName={displayTimer($timer)} bind:isSideNavOpen>
+<Header platformName={displayTimer($countdown)} bind:isSideNavOpen>
   <svelte:fragment slot="skip-to-content">
     <SkipToContent />
   </svelte:fragment>
