@@ -3,6 +3,8 @@
 </script>
 
 <div class="heading">
-  <ChartLine size={32} class="heading-icon" />
-  <h2>Progress</h2>
+  <div class="heading-title">
+    <ChartLine size={32} class="heading-icon" />
+    <h2>Progress</h2>
+  </div>
 </div>

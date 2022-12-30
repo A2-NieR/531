@@ -20,7 +20,10 @@
   } from 'carbon-components-svelte';
 
   import Settings from 'carbon-icons-svelte/lib/Settings.svelte';
+  import Renew from 'carbon-icons-svelte/lib/Renew.svelte';
   import Edit from 'carbon-icons-svelte/lib/Edit.svelte';
+
+  const reload = () => location.reload();
 
   let headers = [
     { key: 'exercise', value: 'Exercise' },
@@ -102,8 +105,16 @@
 </script>
 
 <div class="heading">
-  <Settings size={32} class="heading-icon" />
-  <h2>Settings</h2>
+  <div class="heading-title">
+    <Settings size={32} class="heading-icon" />
+    <h2>Settings</h2>
+  </div>
+  <Button
+    class="pointer-event"
+    kind="tertiary"
+    icon={Renew}
+    on:click={reload}
+  />
 </div>
 
 <Modal
@@ -169,7 +180,7 @@
 
 <style>
   .timer-form {
-    margin: 0 2rem 4rem;
+    margin: 0 2rem 6rem;
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 1rem;

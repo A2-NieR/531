@@ -3,6 +3,8 @@
 </script>
 
 <div class="heading">
-  <Calendar size={32} class="heading-icon" />
-  <h2>Routine</h2>
+  <div class="heading-title">
+    <Calendar size={32} class="heading-icon" />
+    <h2>Routine</h2>
+  </div>
 </div>

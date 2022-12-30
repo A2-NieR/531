@@ -13,11 +13,17 @@ body {
 .heading {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 1.5rem;
 }
 
+.heading-title {
+  display: flex;
+  align-items: center;
+}
+
 .heading-icon {
-  margin-right: 0.75rem;
+  margin-right: 1rem;
 }
 
 .bx--data-table-container {
