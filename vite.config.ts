@@ -9,7 +9,7 @@ export default defineConfig({
     alias: {
       $components: path.resolve('./src/components'),
       $lib: path.resolve('./src/lib'),
-      $routes: path.resolve('./src/routes')
+      $pages: path.resolve('./src/pages')
     }
   }
 });

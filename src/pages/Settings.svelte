@@ -15,6 +15,7 @@
     Slider,
     TextInput
   } from 'carbon-components-svelte';
+  import Settings from 'carbon-icons-svelte/lib/Settings.svelte';
   import Edit from 'carbon-icons-svelte/lib/Edit.svelte';
   import Timer from 'carbon-icons-svelte/lib/Timer.svelte';
 
@@ -85,9 +86,13 @@
   let modalContent = '';
 </script>
 
-<h3>Settings</h3>
+<div class="heading">
+  <Settings size={32} class="heading-icon" />
+  <h2>Settings</h2>
+</div>
 
 <Modal
+  class="pointer-event modal"
   bind:open
   {modalHeading}
   primaryButtonText="Confirm"
@@ -110,7 +115,12 @@
       <strong>{$overheadpress} kg</strong>
     {/if}
     {#if cell.key === 'edit' && cell.value === 'edit'}
-      <Button kind="ghost" icon={Edit} on:click={() => editWeight(row.id)} />
+      <Button
+        class="pointer-event"
+        kind="ghost"
+        icon={Edit}
+        on:click={() => editWeight(row.id)}
+      />
     {:else}
       {cell.value}
     {/if}
@@ -118,6 +128,7 @@
 </DataTable>
 
 <Slider
+  class="pointer-event"
   labelText="Timer"
   min={60}
   max={180}
@@ -129,22 +140,22 @@
 />
 
 <div class="timer-form">
-  <Button icon={Timer} on:click={() => ($countdownReset = $countdown)}
-    >Set Timer</Button
+  <Button
+    class="pointer-event"
+    icon={Timer}
+    on:click={() => ($countdownReset = $countdown)}>Set Timer</Button
   >
   <TextInput disabled placeholder={displayTimer($countdownReset)} size="xl" />
 </div>
 
 <style>
-  h3 {
-    margin-bottom: 2rem;
-  }
   .timer-form {
     margin: 0 2rem;
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 1rem;
   }
+
   .modal-content {
     margin: 1rem 0 2rem;
   }

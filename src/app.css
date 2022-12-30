@@ -5,10 +5,19 @@ body {
 }
 
 #app {
-  max-width: 1280px;
+  max-width: 960px;
+  width: 100%;
   margin: 0 auto;
-  padding: 5rem 2rem;
-  overflow: hidden;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.heading-icon {
+  margin-right: 0.75rem;
 }
 
 .bx--data-table-container {
@@ -17,4 +26,20 @@ body {
 
 .bx--slider-container {
   margin-bottom: 1rem;
+}
+
+.pointer-event {
+  pointer-events: fill;
+}
+
+.bx--modal.is-visible {
+  padding-top: 5rem;
+}
+
+.swipe-indicator {
+  z-index: unset !important;
+}
+
+.swipeable-item-inner {
+  height: 100%;
 }
