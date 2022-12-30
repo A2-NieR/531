@@ -1,5 +1,10 @@
 <script lang="ts">
-  import { displayTimer, countdown, countdownReset } from '$lib/stores';
+  import {
+    displayTimer,
+    countdown,
+    countdownReset,
+    loginStatus
+  } from '$lib/stores';
   import {
     Header,
     HeaderGlobalAction,
@@ -29,26 +34,30 @@
   };
 </script>
 
-<Header platformName={displayTimer($countdown)}>
-  <svelte:fragment slot="skip-to-content">
-    <SkipToContent />
-  </svelte:fragment>
+{#if !$loginStatus}
+  <Header platformName="5/3/1" />
+{:else}
+  <Header platformName={displayTimer($countdown)}>
+    <svelte:fragment slot="skip-to-content">
+      <SkipToContent />
+    </svelte:fragment>
 
-  <HeaderUtilities>
-    <HeaderGlobalAction
-      aria-label="Start"
-      icon={Play}
-      on:click={startCountdown}
-    />
-    <HeaderGlobalAction
-      aria-label="Pause"
-      icon={Pause}
-      on:click={pauseCountdown}
-    />
-    <HeaderGlobalAction
-      aria-label="Reset"
-      icon={Reset}
-      on:click={resetCountdown}
-    />
-  </HeaderUtilities>
-</Header>
+    <HeaderUtilities>
+      <HeaderGlobalAction
+        aria-label="Start"
+        icon={Play}
+        on:click={startCountdown}
+      />
+      <HeaderGlobalAction
+        aria-label="Pause"
+        icon={Pause}
+        on:click={pauseCountdown}
+      />
+      <HeaderGlobalAction
+        aria-label="Reset"
+        icon={Reset}
+        on:click={resetCountdown}
+      />
+    </HeaderUtilities>
+  </Header>
+{/if}

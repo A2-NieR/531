@@ -1,9 +1,12 @@
 import { writable } from 'svelte/store';
 
 export const darkMode = writable(false);
+export const loginStatus = writable(false);
 
-export const deadlifts = writable(0.0);
-export const squats = writable(0.0);
+export const weightRecordId = writable('');
+
+export const deadlift = writable(0.0);
+export const squat = writable(0.0);
 export const benchpress = writable(0.0);
 export const overheadpress = writable(0.0);
 
