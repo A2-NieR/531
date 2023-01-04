@@ -1,0 +1,55 @@
+/* Basic Resets Start */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	background-color: rgba(128, 75, 0, 0.2);
+}
+
+html {
+	color-scheme: dark light;
+}
+
+body {
+	min-height: 100vh;
+}
+
+img,
+picture,
+svg,
+video {
+	display: block;
+	max-width: 100%;
+}
+
+input,
+textarea,
+button,
+select {
+	font: inherit;
+}
+/* Basic Resets End */
+
+main {
+	padding: 4rem 1rem 0;
+}
+
+.heading {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 1.5rem;
+}
+
+.heading-title {
+	display: flex;
+	align-items: center;
+}
+
+.heading-icon {
+	margin-right: 1rem;
+}
+
+.bx--data-table-container {
+	margin-bottom: 2rem;
+}
