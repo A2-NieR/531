@@ -1,0 +1,111 @@
+/* Basic Resets Start */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	/* background-color: rgba(128, 75, 0, 0.2); */
+}
+
+html {
+	color-scheme: dark light;
+}
+
+body {
+	min-height: 100vh;
+}
+
+img,
+picture,
+svg,
+video {
+	display: block;
+	max-width: 100%;
+}
+
+input,
+textarea,
+button,
+select {
+	font: inherit;
+}
+/* Basic Resets End */
+
+main {
+	padding: 4rem 1rem 0;
+}
+
+.heading {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 1.5rem;
+}
+
+.heading-title {
+	display: flex;
+	align-items: center;
+}
+
+.heading-icon {
+	margin-right: 1rem;
+}
+
+.bx--data-table-container {
+	margin-bottom: 2rem;
+}
+
+/* SideBar Workaround: https://github.com/carbon-design-system/carbon-components-svelte/issues/762#issuecomment-885484991 */
+.bx--side-nav {
+	background-color: var(--cds-ui-background);
+	color: var(--cds-text-02);
+	border-right: 1px solid var(--cds-ui-02);
+}
+.bx--side-nav__divider {
+	background-color: var(--cds-ui-03);
+}
+a.bx--side-nav__link > .bx--side-nav__link-text {
+	color: var(--cds-text-02);
+}
+.bx--side-nav__submenu {
+	color: var(--cds-text-02);
+}
+.bx--side-nav__menu a.bx--side-nav__link--current,
+.bx--side-nav__menu a.bx--side-nav__link[aria-current='page'],
+a.bx--side-nav__link--current {
+	background-color: var(--cds-hover-ui);
+}
+
+.bx--side-nav__menu a.bx--side-nav__link--current > span,
+.bx--side-nav__menu a.bx--side-nav__link[aria-current='page'] > span,
+a.bx--side-nav__link--current > span {
+	color: var(--cds-text-01);
+}
+
+.bx--side-nav__icon > svg {
+	fill: var(--cds-text-02);
+}
+a.bx--side-nav__link[aria-current='page'],
+a.bx--side-nav__link--current {
+	background-color: var(--cds-hover-ui);
+}
+a.bx--side-nav__link[aria-current='page'] .bx--side-nav__link-text,
+a.bx--side-nav__link--current .bx--side-nav__link-text {
+	color: var(--cds-text-01);
+}
+.bx--side-nav__item:not(.bx--side-nav__item--active) > .bx--side-nav__link:hover,
+.bx--side-nav__menu
+	a.bx--side-nav__link:not(.bx--side-nav__link--current):not([aria-current='page']):hover {
+	color: var(--cds-text-01);
+	background-color: var(--cds-hover-ui);
+}
+.bx--side-nav__item:not(.bx--side-nav__item--active) > .bx--side-nav__link:hover > span,
+.bx--side-nav__item:not(.bx--side-nav__item--active)
+	.bx--side-nav__menu-item
+	> .bx--side-nav__link:hover
+	> span {
+	color: var(--cds-text-01);
+}
+.bx--side-nav__submenu:hover {
+	color: var(--cds-text-01);
+	background-color: var(--cds-hover-ui);
+}
