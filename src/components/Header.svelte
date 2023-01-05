@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { displayTimer, countdown, countdownReset, loginStatus } from '$lib/stores';
+	import { countdown, countdownReset, loginStatus } from '$lib/stores';
+	import { displayTimer } from '$lib/helpers';
+
 	import {
 		Header,
 		HeaderGlobalAction,
@@ -7,11 +9,11 @@
 		HeaderNavItem,
 		HeaderUtilities,
 		SideNav,
+		SideNavDivider,
 		SideNavItems,
 		SideNavLink,
 		SkipToContent
 	} from 'carbon-components-svelte';
-
 	import Calendar from 'carbon-icons-svelte/lib/Calendar.svelte';
 	import ChartLine from 'carbon-icons-svelte/lib/ChartLine.svelte';
 	import Settings from 'carbon-icons-svelte/lib/Settings.svelte';
@@ -56,7 +58,9 @@
 		<SideNav bind:isOpen={isSideNavOpen}>
 			<SideNavItems>
 				<SideNavLink href="/" text="Routine" icon={Calendar} on:click={closeSidebar} />
+				<SideNavDivider />
 				<SideNavLink href="/progress" text="Progress" icon={ChartLine} on:click={closeSidebar} />
+				<SideNavDivider />
 				<SideNavLink href="/settings" text="Settings" icon={Settings} on:click={closeSidebar} />
 			</SideNavItems>
 		</SideNav>

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { beforeUpdate, onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import {
@@ -9,12 +9,13 @@
 		deadlift,
 		squat,
 		benchpress,
-		overheadpress
+		overheadpress,
+		errorMessage
 	} from '$lib/stores';
-	import { getOneRepMax, weightList } from '$lib/pb';
-	import Header from '$components/Header.svelte';
-	import { Loading } from 'carbon-components-svelte';
+	import pb from '$lib/pb';
 
+	import Header from '$components/Header.svelte';
+	import { Loading, ToastNotification } from 'carbon-components-svelte';
 	import 'carbon-components-svelte/css/all.css';
 	import './styles.css';
 
@@ -32,15 +33,22 @@
 
 	onMount(async () => {
 		if ($loginStatus) {
-			$loading = false;
-			const list = await weightList();
-			$weightRecordId = list.items[0].id;
-			const result = await getOneRepMax($weightRecordId);
+			try {
+				$loading = false;
+				const list = await pb.collection('weights').getList(1);
+				$weightRecordId = list.items[0].id;
+				const result = await pb.collection('weights').getOne($weightRecordId);
 
-			$deadlift = result.deadlift;
-			$squat = result.squat;
-			$benchpress = result.benchpress;
-			$overheadpress = result.overheadpress;
+				$deadlift = result.deadlift;
+				$squat = result.squat;
+				$benchpress = result.benchpress;
+				$overheadpress = result.overheadpress;
+			} catch (err: unknown) {
+				$errorMessage = (err as Error).message;
+				setTimeout(() => {
+					$errorMessage = '';
+				}, 3000);
+			}
 		} else {
 			$loading = false;
 			goto('/login');
@@ -56,6 +64,10 @@
 			<Loading />
 		{:else}
 			<slot />
+		{/if}
+
+		{#if $errorMessage.length > 0}
+			<ToastNotification fullWidth kind="error" title="Error" subtitle={$errorMessage} />
 		{/if}
 	</main>
 </div>

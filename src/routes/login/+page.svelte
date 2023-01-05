@@ -1,8 +1,14 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import pb from '$lib/pb';
-	import { loginStatus } from '$lib/stores';
-	import { FluidForm, TextInput, PasswordInput, Button } from 'carbon-components-svelte';
+	import { errorMessage, loginStatus } from '$lib/stores';
+	import {
+		FluidForm,
+		TextInput,
+		PasswordInput,
+		Button,
+		ToastNotification
+	} from 'carbon-components-svelte';
 
 	let username: string;
 	let password: string;
@@ -15,8 +21,11 @@
 			if ($loginStatus) {
 				goto('/');
 			}
-		} catch (error) {
-			console.error(error);
+		} catch (err: unknown) {
+			$errorMessage = (err as Error).message;
+			setTimeout(() => {
+				$errorMessage = '';
+			}, 3000);
 		}
 	};
 </script>
@@ -28,6 +37,10 @@
 	<PasswordInput bind:value={password} type="password" labelText="Password" required />
 	<Button type="submit">Login</Button>
 </FluidForm>
+
+{#if $errorMessage.length > 0}
+	<ToastNotification fullWidth kind="error" title="Error" subtitle={$errorMessage} />
+{/if}
 
 <style>
 	h2 {

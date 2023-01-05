@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import pb, { updateOneRepMax } from '$lib/pb';
+	import pb from '$lib/pb';
 	import {
 		deadlift,
 		squat,
@@ -8,62 +8,73 @@
 		overheadpress,
 		countdown,
 		countdownReset,
-		displayTimer,
 		loginStatus,
-		weightRecordId
+		weightRecordId,
+		errorMessage
 	} from '$lib/stores';
-	import { Button, DataTable, Modal, Slider, TextInput } from 'carbon-components-svelte';
+	import { displayTimer } from '$lib/helpers';
 
+	import {
+		Button,
+		DataTable,
+		Modal,
+		Slider,
+		TextInput,
+		ToastNotification
+	} from 'carbon-components-svelte';
 	import Settings from 'carbon-icons-svelte/lib/Settings.svelte';
-	import Renew from 'carbon-icons-svelte/lib/Renew.svelte';
 	import Edit from 'carbon-icons-svelte/lib/Edit.svelte';
 
-	const reload = () => location.reload();
+	let open = false;
+	let currentLift = '';
+	let currentWeight = 0;
+	let modalHeading = '';
+	let modalContent = '';
 
 	let headers = [
-		{ key: 'exercise', value: 'Exercise' },
+		{ key: 'lift', value: 'Lift' },
 		{ key: 'orm', value: '1 RM' },
 		{ key: 'edit', value: '' }
 	];
 
 	let rows = [
-		{ id: 'dl', exercise: 'Deadlift', orm: '', edit: 'edit' },
-		{ id: 'sq', exercise: 'Squat', orm: '', edit: 'edit' },
-		{ id: 'bp', exercise: 'Benchpress', orm: '', edit: 'edit' },
-		{ id: 'oh', exercise: 'Overheadpress', orm: '', edit: 'edit' }
+		{ id: 'dl', lift: 'Deadlift', orm: '', edit: 'edit' },
+		{ id: 'sq', lift: 'Squat', orm: '', edit: 'edit' },
+		{ id: 'bp', lift: 'Benchpress', orm: '', edit: 'edit' },
+		{ id: 'oh', lift: 'Overheadpress', orm: '', edit: 'edit' }
 	];
 
 	const editWeight = (rowId: string) => {
 		switch (rowId) {
 			case 'dl':
-				currentExercise = 'Deadlift';
-				modalHeading = `Set ${currentExercise}`;
-				modalContent = `Set the 1 Rep Max for ${currentExercise}.`;
+				currentLift = 'Deadlift';
+				modalHeading = `Set ${currentLift}`;
+				modalContent = `Set the 1 Rep Max for ${currentLift}.`;
 				open = true;
 				break;
 			case 'sq':
-				currentExercise = 'Squat';
-				modalHeading = `Set ${currentExercise}`;
-				modalContent = `Set the 1 Rep Max for ${currentExercise}.`;
+				currentLift = 'Squat';
+				modalHeading = `Set ${currentLift}`;
+				modalContent = `Set the 1 Rep Max for ${currentLift}.`;
 				open = true;
 				break;
 			case 'bp':
-				currentExercise = 'Benchpress';
-				modalHeading = `Set ${currentExercise}`;
-				modalContent = `Set the 1 Rep Max for ${currentExercise}.`;
+				currentLift = 'Benchpress';
+				modalHeading = `Set ${currentLift}`;
+				modalContent = `Set the 1 Rep Max for ${currentLift}.`;
 				open = true;
 				break;
 			case 'oh':
-				currentExercise = 'Overheadpress';
-				modalHeading = `Set ${currentExercise}`;
-				modalContent = `Set the 1 Rep Max for ${currentExercise}.`;
+				currentLift = 'Overheadpress';
+				modalHeading = `Set ${currentLift}`;
+				modalContent = `Set the 1 Rep Max for ${currentLift}.`;
 				open = true;
 				break;
 		}
 	};
 
-	const saveWeight = async (exercise: string) => {
-		switch (exercise) {
+	const saveWeight = async (lift: string) => {
+		switch (lift) {
 			case 'Deadlift':
 				$deadlift = currentWeight;
 				break;
@@ -77,13 +88,21 @@
 				$overheadpress = currentWeight;
 				break;
 		}
-		await updateOneRepMax($weightRecordId, {
-			deadlift: $deadlift,
-			squat: $squat,
-			benchpress: $benchpress,
-			overheadpress: $overheadpress
-		});
-		open = false;
+
+		try {
+			await pb.collection('weights').update($weightRecordId, {
+				deadlift: $deadlift,
+				squat: $squat,
+				benchpress: $benchpress,
+				overheadpress: $overheadpress
+			});
+			open = false;
+		} catch (err: unknown) {
+			$errorMessage = (err as Error).message;
+			setTimeout(() => {
+				$errorMessage = '';
+			}, 3000);
+		}
 	};
 
 	const submitLogout = () => {
@@ -91,12 +110,6 @@
 		$loginStatus = false;
 		goto('/login');
 	};
-
-	let open = false;
-	let currentExercise = '';
-	let currentWeight = 0;
-	let modalHeading = '';
-	let modalContent = '';
 </script>
 
 <div class="heading">
@@ -104,7 +117,6 @@
 		<Settings size={32} class="heading-icon" />
 		<h2>Settings</h2>
 	</div>
-	<!-- <Button class="pointer-event" kind="tertiary" icon={Renew} on:click={reload} /> -->
 </div>
 
 <Modal
@@ -113,7 +125,7 @@
 	{modalHeading}
 	primaryButtonText="Confirm"
 	secondaryButtonText="Cancel"
-	on:click:button--primary={() => saveWeight(currentExercise)}
+	on:click:button--primary={() => saveWeight(currentLift)}
 	on:click:button--secondary={() => (open = false)}
 	><p class="modal-content">{modalContent}</p>
 	<TextInput size="xl" type="number" bind:value={currentWeight} />
@@ -158,6 +170,10 @@
 <div class="logout-btn">
 	<Button class="pointer-event" kind="danger-tertiary" on:click={submitLogout}>Logout</Button>
 </div>
+
+{#if $errorMessage.length > 0}
+	<ToastNotification fullWidth kind="error" title="Error" subtitle={$errorMessage} />
+{/if}
 
 <style>
 	.timer-form {
