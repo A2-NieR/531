@@ -1,21 +1,19 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import pb from '$lib/pb';
+	import { enhance } from '$app/forms';
 	import {
-		deadlift,
-		squat,
 		benchpress,
-		overheadpress,
 		countdown,
 		countdownReset,
-		loginStatus,
-		weightRecordId,
-		errorMessage
+		deadlift,
+		errorMessage,
+		overheadpress,
+		squat
 	} from '$lib/stores';
-	import { displayTimer } from '$lib/helpers';
+	import { displayTimer } from '$lib/utils';
 
 	import {
 		Button,
+		ButtonSet,
 		DataTable,
 		Modal,
 		Slider,
@@ -26,90 +24,20 @@
 	import Edit from 'carbon-icons-svelte/lib/Edit.svelte';
 
 	let open = false;
-	let currentLift = '';
-	let currentWeight = 0;
-	let modalHeading = '';
-	let modalContent = '';
+	let modalHeading = 'Update Weights';
+	let modalContent = 'Edit and save the 1 Rep Max Weights and save them to the Database.';
 
 	let headers = [
 		{ key: 'lift', value: 'Lift' },
-		{ key: 'orm', value: '1 RM' },
-		{ key: 'edit', value: '' }
+		{ key: 'orm', value: '1 RM' }
 	];
 
 	let rows = [
-		{ id: 'dl', lift: 'Deadlift', orm: '', edit: 'edit' },
-		{ id: 'sq', lift: 'Squat', orm: '', edit: 'edit' },
-		{ id: 'bp', lift: 'Benchpress', orm: '', edit: 'edit' },
-		{ id: 'oh', lift: 'Overheadpress', orm: '', edit: 'edit' }
+		{ id: 'dl', lift: 'Deadlift', orm: '' },
+		{ id: 'sq', lift: 'Squat', orm: '' },
+		{ id: 'bp', lift: 'Benchpress', orm: '' },
+		{ id: 'oh', lift: 'Overheadpress', orm: '' }
 	];
-
-	const editWeight = (rowId: string) => {
-		switch (rowId) {
-			case 'dl':
-				currentLift = 'Deadlift';
-				modalHeading = `Set ${currentLift}`;
-				modalContent = `Set the 1 Rep Max for ${currentLift}.`;
-				open = true;
-				break;
-			case 'sq':
-				currentLift = 'Squat';
-				modalHeading = `Set ${currentLift}`;
-				modalContent = `Set the 1 Rep Max for ${currentLift}.`;
-				open = true;
-				break;
-			case 'bp':
-				currentLift = 'Benchpress';
-				modalHeading = `Set ${currentLift}`;
-				modalContent = `Set the 1 Rep Max for ${currentLift}.`;
-				open = true;
-				break;
-			case 'oh':
-				currentLift = 'Overheadpress';
-				modalHeading = `Set ${currentLift}`;
-				modalContent = `Set the 1 Rep Max for ${currentLift}.`;
-				open = true;
-				break;
-		}
-	};
-
-	const saveWeight = async (lift: string) => {
-		switch (lift) {
-			case 'Deadlift':
-				$deadlift = currentWeight;
-				break;
-			case 'Squat':
-				$squat = currentWeight;
-				break;
-			case 'Benchpress':
-				$benchpress = currentWeight;
-				break;
-			case 'Overheadpress':
-				$overheadpress = currentWeight;
-				break;
-		}
-
-		try {
-			await pb.collection('weights').update($weightRecordId, {
-				deadlift: $deadlift,
-				squat: $squat,
-				benchpress: $benchpress,
-				overheadpress: $overheadpress
-			});
-			open = false;
-		} catch (err: unknown) {
-			$errorMessage = (err as Error).message;
-			setTimeout(() => {
-				$errorMessage = '';
-			}, 3000);
-		}
-	};
-
-	const submitLogout = () => {
-		pb.authStore.clear();
-		$loginStatus = false;
-		goto('/login');
-	};
 </script>
 
 <div class="heading">
@@ -119,16 +47,48 @@
 	</div>
 </div>
 
-<Modal
-	class="pointer-event modal"
-	bind:open
-	{modalHeading}
-	primaryButtonText="Confirm"
-	secondaryButtonText="Cancel"
-	on:click:button--primary={() => saveWeight(currentLift)}
-	on:click:button--secondary={() => (open = false)}
+<Modal class="modal" bind:open {modalHeading} passiveModal
 	><p class="modal-content">{modalContent}</p>
-	<TextInput size="xl" type="number" bind:value={currentWeight} />
+	<form
+		class="modal-form"
+		method="POST"
+		action="?/weights"
+		use:enhance={() =>
+			async ({ result }) => {
+				if (result.type === 'success') {
+					open = false;
+				}
+			}}
+	>
+		<div class="input-group">
+			<TextInput
+				size="xl"
+				type="number"
+				labelText="Deadlift"
+				name="deadlift"
+				bind:value={$deadlift}
+			/>
+			<TextInput size="xl" type="number" labelText="Squat" name="squat" bind:value={$squat} />
+			<TextInput
+				size="xl"
+				type="number"
+				labelText="Benchpress"
+				name="benchpress"
+				bind:value={$benchpress}
+			/>
+			<TextInput
+				size="xl"
+				type="number"
+				labelText="Overhead Press"
+				name="overheadpress"
+				bind:value={$overheadpress}
+			/>
+		</div>
+		<ButtonSet>
+			<Button kind="secondary" on:click={() => (open = false)}>Cancel</Button>
+			<Button formaction="?/updateweights" type="submit">Confirm</Button>
+		</ButtonSet>
+	</form>
 </Modal>
 
 <DataTable zebra {headers} {rows}>
@@ -141,41 +101,51 @@
 			<strong>{$benchpress} kg</strong>
 		{:else if cell.key === 'orm' && row.id === 'oh'}
 			<strong>{$overheadpress} kg</strong>
-		{/if}
-		{#if cell.key === 'edit' && cell.value === 'edit'}
-			<Button class="pointer-event" kind="ghost" icon={Edit} on:click={() => editWeight(row.id)} />
 		{:else}
 			{cell.value}
 		{/if}
 	</svelte:fragment>
 </DataTable>
 
-<Slider
-	class="pointer-event"
-	labelText="Timer"
-	min={60}
-	max={180}
-	maxLabel="180s"
-	bind:value={$countdown}
-	step={15}
-	hideTextInput
-	fullWidth
-/>
+<div class="btn-edit-container">
+	<Button kind="tertiary" icon={Edit} on:click={() => (open = true)}>Edit Weights</Button>
+</div>
+
+<div class="slider-container">
+	<Slider
+		labelText="Timer"
+		min={60}
+		max={180}
+		maxLabel="180s"
+		bind:value={$countdown}
+		step={15}
+		hideTextInput
+		fullWidth
+	/>
+</div>
 
 <div class="timer-form">
-	<Button class="pointer-event" on:click={() => ($countdownReset = $countdown)}>Set Timer</Button>
+	<Button on:click={() => ($countdownReset = $countdown)}>Set Timer</Button>
 	<TextInput disabled placeholder={displayTimer($countdownReset)} size="xl" />
 </div>
 
-<div class="logout-btn">
-	<Button class="pointer-event" kind="danger-tertiary" on:click={submitLogout}>Logout</Button>
-</div>
+<form class="logout-btn" method="POST" action="?/logout">
+	<Button kind="danger-tertiary" type="submit" formaction="?/register">Logout</Button>
+</form>
 
 {#if $errorMessage.length > 0}
 	<ToastNotification fullWidth kind="error" title="Error" subtitle={$errorMessage} />
 {/if}
 
 <style>
+	.btn-edit-container {
+		display: flex;
+		justify-content: center;
+		margin: 0 auto 1rem;
+	}
+	.slider-container {
+		margin-bottom: 2rem;
+	}
 	.timer-form {
 		margin: 0 2rem 6rem;
 		display: grid;

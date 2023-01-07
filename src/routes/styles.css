@@ -30,7 +30,12 @@ select {
 }
 /* Basic Resets End */
 
+.app {
+	height: 100vh;
+}
+
 main {
+	height: 100%;
 	padding: 4rem 1rem 0;
 }
 
@@ -50,8 +55,25 @@ main {
 	margin-right: 1rem;
 }
 
+.modal-form {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 100%;
+}
+
 .bx--data-table-container {
 	margin-bottom: 2rem;
+}
+
+.bx--btn-set {
+	justify-content: center;
+}
+
+.bx--modal-content {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
 }
 
 /* SideBar Workaround: https://github.com/carbon-design-system/carbon-components-svelte/issues/762#issuecomment-885484991 */

@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import pb from '$lib/pb';
-	import { errorMessage, loginStatus } from '$lib/stores';
+	import { errorMessage } from '$lib/stores';
 	import {
 		FluidForm,
 		TextInput,
@@ -9,32 +7,13 @@
 		Button,
 		ToastNotification
 	} from 'carbon-components-svelte';
-
-	let username: string;
-	let password: string;
-
-	const submitLogin = async (e: { preventDefault: () => void }) => {
-		e.preventDefault();
-		try {
-			await pb.admins.authWithPassword(username, password);
-			$loginStatus = pb.authStore.isValid;
-			if ($loginStatus) {
-				goto('/');
-			}
-		} catch (err: unknown) {
-			$errorMessage = (err as Error).message;
-			setTimeout(() => {
-				$errorMessage = '';
-			}, 3000);
-		}
-	};
 </script>
 
 <h2>Login</h2>
 
-<FluidForm on:submit={submitLogin}>
-	<TextInput bind:value={username} labelText="Username" required />
-	<PasswordInput bind:value={password} type="password" labelText="Password" required />
+<FluidForm method="POST">
+	<TextInput name="email" labelText="Username" required />
+	<PasswordInput name="password" type="password" labelText="Password" required />
 	<Button type="submit">Login</Button>
 </FluidForm>
 

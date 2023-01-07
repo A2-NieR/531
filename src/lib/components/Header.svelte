@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { countdown, countdownReset, loginStatus } from '$lib/stores';
-	import { displayTimer } from '$lib/helpers';
+	import { countdown, countdownReset } from '$lib/stores';
+	import { displayTimer } from '$lib/utils';
 
 	import {
 		Header,
@@ -20,6 +20,8 @@
 	import Play from 'carbon-icons-svelte/lib/Play.svelte';
 	import Pause from 'carbon-icons-svelte/lib/Pause.svelte';
 	import Reset from 'carbon-icons-svelte/lib/Reset.svelte';
+
+	export let loginStatus: boolean;
 
 	let isSideNavOpen = false;
 	const closeSidebar = () => (isSideNavOpen = false);
@@ -41,7 +43,7 @@
 	};
 </script>
 
-{#if !$loginStatus}
+{#if !loginStatus}
 	<Header platformName="5/3/1" />
 {:else}
 	<Header platformName={displayTimer($countdown)} bind:isSideNavOpen>
