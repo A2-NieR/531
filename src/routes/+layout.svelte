@@ -2,7 +2,15 @@
 	import { beforeUpdate, onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import { navigating } from '$app/stores';
-	import { benchpress, deadlift, errorMessage, overheadpress, squat } from '$lib/stores';
+	import {
+		benchpress,
+		deadlift,
+		overheadpress,
+		squat,
+		toastError,
+		toastSuccess,
+		toastWarning
+	} from '$lib/stores';
 
 	import Header from '$lib/components/Header.svelte';
 	import { Loading, ToastNotification } from 'carbon-components-svelte';
@@ -21,7 +29,7 @@
 	});
 
 	onMount(async () => {
-		if (data) {
+		if (data.user) {
 			const { deadlift, squat, benchpress, overheadpress } = data.weights;
 			$deadlift = deadlift;
 			$squat = squat;
@@ -36,11 +44,22 @@
 		<Loading />
 	{:else}
 		<Header loginStatus={data.user !== undefined} />
-
 		<main>
 			<slot />
-			{#if $errorMessage.length > 0}
-				<ToastNotification fullWidth kind="error" title="Error" subtitle={$errorMessage} />
+			{#if $toastSuccess.length > 0}
+				<ToastNotification fullWidth lowContrast kind="success" subtitle={$toastSuccess} />
+			{/if}
+			{#if $toastWarning.length > 0}
+				<ToastNotification fullWidth lowContrast kind="warning" subtitle={$toastWarning} />
+			{/if}
+			{#if $toastError.length > 0}
+				<ToastNotification
+					fullWidth
+					lowContrast
+					kind="error"
+					title="Error"
+					subtitle={$toastError}
+				/>
 			{/if}
 		</main>
 	{/if}

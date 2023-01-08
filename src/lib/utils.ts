@@ -212,7 +212,7 @@ const increaseCycle = (currentCycle: number): number => {
 	}
 };
 
-const increaseWeights = (currentWeights: Weights): Weights => {
+export const increaseWeights = (currentWeights: Weights): Weights => {
 	return {
 		deadlift: (currentWeights.deadlift += 5),
 		squat: (currentWeights.squat += 5),

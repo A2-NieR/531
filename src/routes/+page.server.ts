@@ -1,5 +1,7 @@
-import { calculateWeights } from '$lib/utils';
+import { calculateWeights, increaseWeights } from '$lib/utils';
 import type { Actions, PageServerLoad } from './$types';
+import type { ClientResponseError } from 'pocketbase';
+import { error, fail } from '@sveltejs/kit';
 
 export const load = (async ({ parent }) => {
 	const parentData = await parent();
@@ -37,8 +39,25 @@ export const actions: Actions = {
 		//TODO: Timeout & feedback when offline
 		try {
 			await locals.pb.collection('weeks').create(workoutData);
+
+			if (workoutData.cycle === 3) {
+				const currentWeights = {
+					deadlift: workoutData.deadlift,
+					squat: workoutData.squat,
+					benchpress: workoutData.benchpress,
+					overheadpress: workoutData.overheadpress
+				};
+				const increasedWeights = increaseWeights(currentWeights);
+				await locals.pb.collection('weights').update(locals.weightRecordId, increasedWeights);
+			}
 		} catch (err) {
-			console.error(err);
+			if ((err as ClientResponseError).data?.code === 400) {
+				return fail(400, { message: (err as ClientResponseError).data.message });
+			} else if ((err as ClientResponseError).data?.code === 403) {
+				return error(403, (err as ClientResponseError).data.message);
+			} else {
+				return error(400, err as Error);
+			}
 		}
 	}
 };

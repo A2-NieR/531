@@ -5,9 +5,11 @@
 		countdown,
 		countdownReset,
 		deadlift,
-		errorMessage,
 		overheadpress,
-		squat
+		squat,
+		toastError,
+		toastSuccess,
+		toastWarning
 	} from '$lib/stores';
 	import { displayTimer } from '$lib/utils';
 
@@ -52,11 +54,25 @@
 	<form
 		class="modal-form"
 		method="POST"
-		action="?/weights"
+		action="?/updateweights"
 		use:enhance={() =>
 			async ({ result }) => {
 				if (result.type === 'success') {
 					open = false;
+					$toastSuccess = 'Successfully updated weights.';
+					setTimeout(() => {
+						$toastSuccess = '';
+					}, 3000);
+				} else if (result.type === 'failure') {
+					$toastWarning = result.data?.message;
+					setTimeout(() => {
+						$toastWarning = '';
+					}, 3000);
+				} else if (result.type === 'error') {
+					$toastError = result.error.message;
+					setTimeout(() => {
+						$toastError = '';
+					}, 3000);
 				}
 			}}
 	>
@@ -94,20 +110,20 @@
 <DataTable zebra {headers} {rows}>
 	<svelte:fragment slot="cell" let:row let:cell>
 		{#if cell.key === 'orm' && row.id === 'dl'}
-			<strong>{$deadlift} kg</strong>
+			{$deadlift} kg
 		{:else if cell.key === 'orm' && row.id === 'sq'}
-			<strong>{$squat} kg</strong>
+			{$squat} kg
 		{:else if cell.key === 'orm' && row.id === 'bp'}
-			<strong>{$benchpress} kg</strong>
+			{$benchpress} kg
 		{:else if cell.key === 'orm' && row.id === 'oh'}
-			<strong>{$overheadpress} kg</strong>
+			{$overheadpress} kg
 		{:else}
 			{cell.value}
 		{/if}
 	</svelte:fragment>
 </DataTable>
 
-<div class="btn-edit-container">
+<div class="btn-center-container">
 	<Button kind="tertiary" icon={Edit} on:click={() => (open = true)}>Edit Weights</Button>
 </div>
 
@@ -129,20 +145,15 @@
 	<TextInput disabled placeholder={displayTimer($countdownReset)} size="xl" />
 </div>
 
-<form class="logout-btn" method="POST" action="?/logout">
-	<Button kind="danger-tertiary" type="submit" formaction="?/register">Logout</Button>
+<form class="btn-center-container" method="POST" action="?/logout">
+	<Button kind="danger-tertiary" type="submit">Logout</Button>
 </form>
 
-{#if $errorMessage.length > 0}
-	<ToastNotification fullWidth kind="error" title="Error" subtitle={$errorMessage} />
+{#if $toastError.length > 0}
+	<ToastNotification fullWidth kind="error" title="Error" subtitle={$toastError} />
 {/if}
 
 <style>
-	.btn-edit-container {
-		display: flex;
-		justify-content: center;
-		margin: 0 auto 1rem;
-	}
 	.slider-container {
 		margin-bottom: 2rem;
 	}
@@ -155,10 +166,5 @@
 
 	.modal-content {
 		margin: 1rem 0 2rem;
-	}
-	.logout-btn {
-		width: 100%;
-		display: flex;
-		justify-content: center;
 	}
 </style>

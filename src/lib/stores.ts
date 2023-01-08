@@ -1,6 +1,8 @@
 import { writable } from 'svelte/store';
 
-export const errorMessage = writable('');
+export const toastError = writable('');
+export const toastSuccess = writable('');
+export const toastWarning = writable('');
 
 export const deadlift = writable(0.0);
 export const squat = writable(0.0);

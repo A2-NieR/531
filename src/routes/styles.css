@@ -37,6 +37,12 @@ select {
 main {
 	height: 100%;
 	padding: 4rem 1rem 0;
+	position: relative;
+}
+
+.bx--toast-notification {
+	position: absolute;
+	bottom: 1rem;
 }
 
 .heading {
@@ -60,6 +66,16 @@ main {
 	flex-direction: column;
 	justify-content: space-between;
 	height: 100%;
+}
+
+.btn-center-container {
+	display: flex;
+	justify-content: center;
+	margin: 0 auto 1rem;
+}
+
+td {
+	font-weight: 600;
 }
 
 .bx--data-table-container {

@@ -1,4 +1,5 @@
-import { error, redirect } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
+import type { ClientResponseError } from 'pocketbase';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
@@ -12,10 +13,13 @@ export const actions: Actions = {
 			try {
 				await locals.pb.admins.authWithPassword(email, password);
 			} catch (err) {
-				console.error(err);
-				throw error(500, 'Something went wrong');
+				if ((err as ClientResponseError).data?.code === 400) {
+					return fail(400, { message: (err as ClientResponseError).data.message });
+				} else {
+					return error(400, err as Error);
+				}
 			}
+			throw redirect(303, '/');
 		}
-		throw redirect(303, '/');
 	}
 };

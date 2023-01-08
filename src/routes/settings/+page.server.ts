@@ -1,4 +1,5 @@
-import { redirect } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
+import type { ClientResponseError } from 'pocketbase';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
@@ -22,8 +23,17 @@ export const actions: Actions = {
 				benchpress: benchpress,
 				overheadpress: overheadpress
 			});
+			return { success: true };
 		} catch (err) {
-			console.error(err);
+			if ((err as ClientResponseError).data?.code === 400) {
+				return fail(400, { message: (err as ClientResponseError).data.message });
+			} else if ((err as ClientResponseError).data?.code === 403) {
+				return error(403, (err as ClientResponseError).data.message);
+			} else if ((err as ClientResponseError).data?.code === 404) {
+				return error(404, (err as ClientResponseError).data.message);
+			} else {
+				return error(400, err as Error);
+			}
 		}
 	}
 };

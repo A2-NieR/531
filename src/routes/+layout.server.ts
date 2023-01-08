@@ -2,6 +2,7 @@ import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ locals }) => {
 	if (locals.user) {
+		//TODO: Error handling
 		const weightList = await locals.pb.collection('weights').getList(1);
 		const maxWeights = await locals.pb.collection('weights').getOne(weightList.items[0].id);
 		const weekList = await locals.pb.collection('weeks').getFullList(undefined, {

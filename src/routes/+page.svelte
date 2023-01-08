@@ -1,9 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { enhance } from '$app/forms';
+	import type { PageData } from './$types';
+
 	import { Button, ButtonSet, DataTable, Modal, Tab } from 'carbon-components-svelte';
 	import Calendar from 'carbon-icons-svelte/lib/Calendar.svelte';
-	import type { PageData } from './$types';
-	import { enhance } from '$app/forms';
+	import Checkmark from 'carbon-icons-svelte/lib/Checkmark.svelte';
+	import { toastError, toastSuccess, toastWarning } from '$lib/stores';
 
 	export let data: PageData;
 
@@ -83,6 +86,20 @@
 			async ({ result }) => {
 				if (result.type === 'success') {
 					open = false;
+					$toastSuccess = 'Successfully saved to Database';
+					setTimeout(() => {
+						$toastSuccess = '';
+					}, 3000);
+				} else if (result.type === 'failure') {
+					$toastWarning = result.data?.message;
+					setTimeout(() => {
+						$toastWarning = '';
+					}, 3000);
+				} else if (result.type === 'error') {
+					$toastError = result.error.message;
+					setTimeout(() => {
+						$toastError = '';
+					}, 3000);
 				}
 			}}
 	>
@@ -120,7 +137,9 @@
 <DataTable zebra title={titleOne} {headers} rows={rowsOne} size="medium" />
 <DataTable zebra title={titleTwo} {headers} rows={rowsTwo} size="medium" />
 
-<Button on:click={() => (open = true)}>Finish</Button>
+<div class="btn-center-container">
+	<Button icon={Checkmark} on:click={() => (open = true)}>Finish</Button>
+</div>
 
 <style>
 	.modal-form {
