@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
+	import { enhance, type SubmitFunction } from '$app/forms';
 	import {
 		benchpress,
 		countdown,
@@ -40,6 +40,28 @@
 		{ id: 'bp', lift: 'Benchpress', orm: '' },
 		{ id: 'oh', lift: 'Overheadpress', orm: '' }
 	];
+
+	const updateWeights: SubmitFunction =
+		() =>
+		async ({ result }) => {
+			if (result.type === 'success') {
+				open = false;
+				$toastSuccess = 'Successfully updated weights.';
+				setTimeout(() => {
+					$toastSuccess = '';
+				}, 3000);
+			} else if (result.type === 'failure') {
+				$toastWarning = result.data?.message;
+				setTimeout(() => {
+					$toastWarning = '';
+				}, 3000);
+			} else if (result.type === 'error') {
+				$toastError = result.error.message;
+				setTimeout(() => {
+					$toastError = '';
+				}, 3000);
+			}
+		};
 </script>
 
 <div class="heading">
@@ -51,31 +73,7 @@
 
 <Modal class="modal" bind:open {modalHeading} passiveModal
 	><p class="modal-content">{modalContent}</p>
-	<form
-		class="modal-form"
-		method="POST"
-		action="?/updateweights"
-		use:enhance={() =>
-			async ({ result }) => {
-				if (result.type === 'success') {
-					open = false;
-					$toastSuccess = 'Successfully updated weights.';
-					setTimeout(() => {
-						$toastSuccess = '';
-					}, 3000);
-				} else if (result.type === 'failure') {
-					$toastWarning = result.data?.message;
-					setTimeout(() => {
-						$toastWarning = '';
-					}, 3000);
-				} else if (result.type === 'error') {
-					$toastError = result.error.message;
-					setTimeout(() => {
-						$toastError = '';
-					}, 3000);
-				}
-			}}
-	>
+	<form class="modal-form" method="POST" action="?/updateweights" use:enhance={updateWeights}>
 		<div class="input-group">
 			<TextInput
 				size="xl"
@@ -148,10 +146,6 @@
 <form class="btn-center-container" method="POST" action="?/logout">
 	<Button kind="danger-tertiary" type="submit">Logout</Button>
 </form>
-
-{#if $toastError.length > 0}
-	<ToastNotification fullWidth kind="error" title="Error" subtitle={$toastError} />
-{/if}
 
 <style>
 	.slider-container {

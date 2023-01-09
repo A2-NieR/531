@@ -202,16 +202,6 @@ export const calculateWeights = (cycle: number, day: number, weights: Weights): 
 	}
 };
 
-const increaseCycle = (currentCycle: number): number => {
-	if (currentCycle === 1) {
-		return 2;
-	} else if (currentCycle === 2) {
-		return 3;
-	} else {
-		return 1;
-	}
-};
-
 export const increaseWeights = (currentWeights: Weights): Weights => {
 	return {
 		deadlift: (currentWeights.deadlift += 5),

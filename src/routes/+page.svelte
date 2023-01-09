@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { enhance } from '$app/forms';
+	import { enhance, type SubmitFunction } from '$app/forms';
 	import type { PageData } from './$types';
 
 	import { Button, ButtonSet, DataTable, Modal, Tab } from 'carbon-components-svelte';
@@ -74,35 +74,33 @@
 			];
 		}
 	});
+
+	const submitWorkout: SubmitFunction =
+		() =>
+		async ({ result }) => {
+			if (result.type === 'success') {
+				open = false;
+				$toastSuccess = 'Successfully saved to Database';
+				setTimeout(() => {
+					$toastSuccess = '';
+				}, 3000);
+			} else if (result.type === 'failure') {
+				$toastWarning = result.data?.message;
+				setTimeout(() => {
+					$toastWarning = '';
+				}, 3000);
+			} else if (result.type === 'error') {
+				$toastError = result.error.message;
+				setTimeout(() => {
+					$toastError = '';
+				}, 3000);
+			}
+		};
 </script>
 
 <Modal class="modal" bind:open modalHeading="Finish Workout" passiveModal
 	><p class="modal-content">Finish Workout and submit to Database?</p>
-	<form
-		class="modal-form"
-		method="POST"
-		action="?/finishworkout"
-		use:enhance={() =>
-			async ({ result }) => {
-				if (result.type === 'success') {
-					open = false;
-					$toastSuccess = 'Successfully saved to Database';
-					setTimeout(() => {
-						$toastSuccess = '';
-					}, 3000);
-				} else if (result.type === 'failure') {
-					$toastWarning = result.data?.message;
-					setTimeout(() => {
-						$toastWarning = '';
-					}, 3000);
-				} else if (result.type === 'error') {
-					$toastError = result.error.message;
-					setTimeout(() => {
-						$toastError = '';
-					}, 3000);
-				}
-			}}
-	>
+	<form class="modal-form" method="POST" action="?/finishworkout" use:enhance={submitWorkout}>
 		<input type="hidden" name="cycle" value={data.cycle} />
 		<input type="hidden" name="week" value={data.week} />
 		<input type="hidden" name="day" value={data.day} />
