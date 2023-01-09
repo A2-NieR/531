@@ -25,7 +25,7 @@ export const actions: Actions = {
 		const overheadpress = parseFloat(data.get('overheadpress')?.toString() ?? '0');
 
 		const workoutData = {
-			id: `w${week}+d${day}+c${cycle}`.padEnd(15, '+'),
+			id: `w${week}-d${day}-c${cycle}`.padEnd(15, '-'),
 			cycle: cycle,
 			week: week,
 			day: day,
