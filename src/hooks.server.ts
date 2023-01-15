@@ -1,11 +1,9 @@
 import { redirect, type Handle } from '@sveltejs/kit';
 import PocketBase from 'pocketbase';
-import { PUBLIC_BACKEND_URL, PUBLIC_NODE_ENV, PUBLIC_TEST_BACKEND_URL } from '$env/static/public';
+import { PUBLIC_BACKEND_URL } from '$env/static/public';
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const backendUrl =
-		PUBLIC_NODE_ENV === 'DEVELOPMENT' ? PUBLIC_TEST_BACKEND_URL : PUBLIC_BACKEND_URL;
-	const pb = new PocketBase(backendUrl);
+	const pb = new PocketBase(PUBLIC_BACKEND_URL);
 	event.locals.pb = pb;
 	event.locals.pb.authStore.loadFromCookie(event.request.headers.get('cookie') || '');
 

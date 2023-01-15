@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { beforeUpdate } from 'svelte';
+	import { beforeUpdate, onMount, type ComponentType } from 'svelte';
+	import { pwaInfo } from 'virtual:pwa-info';
 	import { browser } from '$app/environment';
 	import { navigating } from '$app/stores';
 	import { toastError, toastSuccess, toastWarning } from '$lib/stores';
@@ -12,6 +13,7 @@
 	import type { LayoutData } from './$types';
 	export let data: LayoutData;
 
+	//TODO: Seamless theme switching
 	beforeUpdate(() => {
 		if (browser) {
 			window.matchMedia('(prefers-color-scheme: light)').matches
@@ -19,7 +21,18 @@
 				: document.documentElement.setAttribute('theme', 'g90');
 		}
 	});
+
+	let ReloadPrompt: ComponentType;
+	onMount(async () => {
+		pwaInfo && (ReloadPrompt = (await import('$lib/components/ReloadPrompt.svelte')).default);
+	});
+
+	$: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 </script>
+
+<svelte:head>
+	{@html webManifest}
+</svelte:head>
 
 <div class="app">
 	{#if $navigating !== null}
@@ -43,6 +56,10 @@
 						title="Error"
 						subtitle={$toastError}
 					/>
+				{/if}
+
+				{#if ReloadPrompt}
+					<svelte:component this={ReloadPrompt} />
 				{/if}
 			</div>
 		</main>

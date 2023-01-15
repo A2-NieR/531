@@ -22,7 +22,7 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
 export const actions: Actions = {
 	logout: ({ locals }) => {
 		locals.pb.authStore.clear();
-		locals.user = undefined;
+		locals.user = null;
 		throw redirect(303, '/login');
 	},
 	updateWeights: async ({ locals, request }) => {

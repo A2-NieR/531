@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { applyAction, enhance, type SubmitFunction } from '$app/forms';
+	import { enhance, type SubmitFunction } from '$app/forms';
 	import { countdown, countdownReset, toastError, toastSuccess, toastWarning } from '$lib/stores';
 	import { displayTimer } from '$lib/utils';
 

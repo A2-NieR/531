@@ -118,7 +118,7 @@
 		<Calendar size={32} class="heading-icon" />
 		<h2>Routine</h2>
 	</div>
-	<Tag type="outline">{`W ${data.week} D ${data.day} C ${data.cycle}`}</Tag>
+	<Tag type="blue">{`W ${data.week} D ${data.day} C ${data.cycle}`}</Tag>
 </div>
 
 <DataTable zebra title={data.workout?.mainLiftOne.lift} {headers} rows={rowsOne} size="medium" />
