@@ -5,7 +5,7 @@ declare namespace App {
 	// interface Error {}
 	interface Locals {
 		pb: import('pocketbase').default;
-		user: import('pocketbase').BaseModel | undefined;
+		user: import('pocketbase').Record | import('pocketbase').Admin | null;
 		weightRecordId: string;
 	}
 	// interface PageData {}

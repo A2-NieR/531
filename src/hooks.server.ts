@@ -14,14 +14,14 @@ export const handle: Handle = async ({ event, resolve }) => {
 			event.locals.user = structuredClone(event.locals.pb.authStore.model);
 		} else if (!event.url.pathname.startsWith('/login')) {
 			event.locals.pb.authStore.clear();
-			event.locals.user = undefined;
+			event.locals.user = null;
 			//! without pathname check this will cause infinite redirects
 			throw redirect(303, '/login');
 		}
 	} catch (err) {
 		console.error(err);
 		event.locals.pb.authStore.clear();
-		event.locals.user = undefined;
+		event.locals.user = null;
 
 		if (!event.url.pathname.startsWith('/login')) {
 			throw redirect(303, '/login');
