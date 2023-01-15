@@ -1,6 +1,23 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { ClientResponseError } from 'pocketbase';
-import type { Actions } from './$types';
+import type { Actions, PageServerLoad } from './$types';
+
+export const load: PageServerLoad = async ({ locals, parent }) => {
+	const { weightRecordId } = await parent();
+
+	try {
+		if (weightRecordId) {
+			const maxWeights = structuredClone(
+				await locals.pb.collection('weights').getOne(weightRecordId)
+			);
+
+			return { weights: maxWeights };
+		}
+		return { weights: undefined };
+	} catch (err) {
+		console.error(err);
+	}
+};
 
 export const actions: Actions = {
 	logout: ({ locals }) => {
@@ -8,22 +25,23 @@ export const actions: Actions = {
 		locals.user = undefined;
 		throw redirect(303, '/login');
 	},
-	updateweights: async ({ locals, request }) => {
-		const data = await request.formData();
-		const deadlift = data.get('deadlift')?.toString();
-		const squat = data.get('squat')?.toString();
-		const benchpress = data.get('benchpress')?.toString();
-		const overheadpress = data.get('overheadpress')?.toString();
+	updateWeights: async ({ locals, request }) => {
+		const formData = await request.formData();
+		const updatedWeights = {
+			deadlift: parseFloat(formData.get('deadlift') as string),
+			squat: parseFloat(formData.get('squat') as string),
+			benchpress: parseFloat(formData.get('benchpress') as string),
+			overheadpress: parseFloat(formData.get('overheadpress') as string)
+		};
 
-		//TODO: Timeout & feedback when offline
+		//TODO: Timeout when offline
 		try {
-			await locals.pb.collection('weights').update(locals.weightRecordId, {
-				deadlift: deadlift,
-				squat: squat,
-				benchpress: benchpress,
-				overheadpress: overheadpress
-			});
-			return { success: true };
+			const weightList = await locals.pb.collection('weights').getList(1);
+			await locals.pb.collection('weights').update(weightList.items[0].id, updatedWeights);
+
+			return {
+				success: true
+			};
 		} catch (err) {
 			if ((err as ClientResponseError).data?.code === 400) {
 				return fail(400, { message: (err as ClientResponseError).data.message });

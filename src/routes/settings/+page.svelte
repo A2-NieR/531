@@ -1,29 +1,14 @@
 <script lang="ts">
-	import { enhance, type SubmitFunction } from '$app/forms';
-	import {
-		benchpress,
-		countdown,
-		countdownReset,
-		deadlift,
-		overheadpress,
-		squat,
-		toastError,
-		toastSuccess,
-		toastWarning
-	} from '$lib/stores';
+	import { applyAction, enhance, type SubmitFunction } from '$app/forms';
+	import { countdown, countdownReset, toastError, toastSuccess, toastWarning } from '$lib/stores';
 	import { displayTimer } from '$lib/utils';
 
-	import {
-		Button,
-		ButtonSet,
-		DataTable,
-		Modal,
-		Slider,
-		TextInput,
-		ToastNotification
-	} from 'carbon-components-svelte';
+	import { Button, ButtonSet, DataTable, Modal, Slider, TextInput } from 'carbon-components-svelte';
 	import Settings from 'carbon-icons-svelte/lib/Settings.svelte';
 	import Edit from 'carbon-icons-svelte/lib/Edit.svelte';
+
+	import type { PageData } from './$types';
+	export let data: PageData;
 
 	let open = false;
 	let modalHeading = 'Update Weights';
@@ -41,9 +26,8 @@
 		{ id: 'oh', lift: 'Overheadpress', orm: '' }
 	];
 
-	const updateWeights: SubmitFunction =
-		() =>
-		async ({ result }) => {
+	const updateWeights: SubmitFunction = () => {
+		return async ({ result, update }) => {
 			if (result.type === 'success') {
 				open = false;
 				$toastSuccess = 'Successfully updated weights.';
@@ -61,7 +45,9 @@
 					$toastError = '';
 				}, 3000);
 			}
+			update({ reset: false });
 		};
+	};
 </script>
 
 <div class="heading">
@@ -73,34 +59,26 @@
 
 <Modal class="modal" bind:open {modalHeading} passiveModal
 	><p class="modal-content">{modalContent}</p>
-	<form class="modal-form" method="POST" action="?/updateweights" use:enhance={updateWeights}>
+	<form class="modal-form" method="POST" action="?/updateWeights" use:enhance={updateWeights}>
 		<div class="input-group">
+			<TextInput size="xl" labelText="Deadlift" name="deadlift" value={data.weights?.deadlift} />
+			<TextInput size="xl" labelText="Squat" name="squat" value={data.weights?.squat} />
 			<TextInput
 				size="xl"
-				type="number"
-				labelText="Deadlift"
-				name="deadlift"
-				bind:value={$deadlift}
-			/>
-			<TextInput size="xl" type="number" labelText="Squat" name="squat" bind:value={$squat} />
-			<TextInput
-				size="xl"
-				type="number"
 				labelText="Benchpress"
 				name="benchpress"
-				bind:value={$benchpress}
+				value={data.weights?.benchpress}
 			/>
 			<TextInput
 				size="xl"
-				type="number"
 				labelText="Overhead Press"
 				name="overheadpress"
-				bind:value={$overheadpress}
+				value={data.weights?.overheadpress}
 			/>
 		</div>
 		<ButtonSet>
 			<Button kind="secondary" on:click={() => (open = false)}>Cancel</Button>
-			<Button formaction="?/updateweights" type="submit">Confirm</Button>
+			<Button type="submit">Confirm</Button>
 		</ButtonSet>
 	</form>
 </Modal>
@@ -108,13 +86,13 @@
 <DataTable zebra {headers} {rows}>
 	<svelte:fragment slot="cell" let:row let:cell>
 		{#if cell.key === 'orm' && row.id === 'dl'}
-			{$deadlift} kg
+			{data.weights?.deadlift} kg
 		{:else if cell.key === 'orm' && row.id === 'sq'}
-			{$squat} kg
+			{data.weights?.squat} kg
 		{:else if cell.key === 'orm' && row.id === 'bp'}
-			{$benchpress} kg
+			{data.weights?.benchpress} kg
 		{:else if cell.key === 'orm' && row.id === 'oh'}
-			{$overheadpress} kg
+			{data.weights?.overheadpress} kg
 		{:else}
 			{cell.value}
 		{/if}

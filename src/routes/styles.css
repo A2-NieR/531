@@ -92,6 +92,10 @@ td {
 	height: 100%;
 }
 
+.modal-form > .input-group > .bx--text-input-wrapper {
+	margin-bottom: 2rem;
+}
+
 /* SideBar Workaround: https://github.com/carbon-design-system/carbon-components-svelte/issues/762#issuecomment-885484991 */
 .bx--side-nav {
 	background-color: var(--cds-ui-background);

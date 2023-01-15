@@ -1,6 +1,4 @@
-// export const serializeNonPOJOS = (obj: unknown) => structuredClone(obj);
-
-type Weights = {
+export type Weights = {
 	deadlift: number;
 	squat: number;
 	benchpress: number;

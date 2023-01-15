@@ -1,16 +1,8 @@
 <script lang="ts">
-	import { beforeUpdate, onMount } from 'svelte';
+	import { beforeUpdate } from 'svelte';
 	import { browser } from '$app/environment';
 	import { navigating } from '$app/stores';
-	import {
-		benchpress,
-		deadlift,
-		overheadpress,
-		squat,
-		toastError,
-		toastSuccess,
-		toastWarning
-	} from '$lib/stores';
+	import { toastError, toastSuccess, toastWarning } from '$lib/stores';
 
 	import Header from '$lib/components/Header.svelte';
 	import { Loading, ToastNotification } from 'carbon-components-svelte';
@@ -25,16 +17,6 @@
 			window.matchMedia('(prefers-color-scheme: light)').matches
 				? document.documentElement.setAttribute('theme', 'white')
 				: document.documentElement.setAttribute('theme', 'g90');
-		}
-	});
-
-	onMount(async () => {
-		if (data.user) {
-			const { deadlift, squat, benchpress, overheadpress } = data.weights;
-			$deadlift = deadlift;
-			$squat = squat;
-			$benchpress = benchpress;
-			$overheadpress = overheadpress;
 		}
 	});
 </script>
