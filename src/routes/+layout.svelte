@@ -28,21 +28,33 @@
 		<Header loginStatus={data.user !== undefined} />
 		<main>
 			<slot />
-			{#if $toastSuccess.length > 0}
-				<ToastNotification fullWidth lowContrast kind="success" subtitle={$toastSuccess} />
-			{/if}
-			{#if $toastWarning.length > 0}
-				<ToastNotification fullWidth lowContrast kind="warning" subtitle={$toastWarning} />
-			{/if}
-			{#if $toastError.length > 0}
-				<ToastNotification
-					fullWidth
-					lowContrast
-					kind="error"
-					title="Error"
-					subtitle={$toastError}
-				/>
-			{/if}
+			<div class="toaster">
+				{#if $toastSuccess.length > 0}
+					<ToastNotification fullWidth lowContrast kind="success" subtitle={$toastSuccess} />
+				{/if}
+				{#if $toastWarning.length > 0}
+					<ToastNotification fullWidth lowContrast kind="warning" subtitle={$toastWarning} />
+				{/if}
+				{#if $toastError.length > 0}
+					<ToastNotification
+						fullWidth
+						lowContrast
+						kind="error"
+						title="Error"
+						subtitle={$toastError}
+					/>
+				{/if}
+			</div>
 		</main>
 	{/if}
 </div>
+
+<style>
+	.toaster {
+		position: absolute;
+		max-width: 100%;
+		top: 4rem;
+		right: 1rem;
+		left: 1rem;
+	}
+</style>

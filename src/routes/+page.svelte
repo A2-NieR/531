@@ -2,7 +2,7 @@
 	import { enhance, type SubmitFunction } from '$app/forms';
 	import type { PageData } from './$types';
 
-	import { Button, ButtonSet, DataTable, Modal, TextInput } from 'carbon-components-svelte';
+	import { Button, ButtonSet, DataTable, Modal, Tag, TextInput } from 'carbon-components-svelte';
 	import Calendar from 'carbon-icons-svelte/lib/Calendar.svelte';
 	import Checkmark from 'carbon-icons-svelte/lib/Checkmark.svelte';
 	import { toastError, toastSuccess, toastWarning } from '$lib/stores';
@@ -118,7 +118,7 @@
 		<Calendar size={32} class="heading-icon" />
 		<h2>Routine</h2>
 	</div>
-	<div>{`W ${data.week} D ${data.day} C ${data.cycle}`}</div>
+	<Tag type="outline">{`W ${data.week} D ${data.day} C ${data.cycle}`}</Tag>
 </div>
 
 <DataTable zebra title={data.workout?.mainLiftOne.lift} {headers} rows={rowsOne} size="medium" />

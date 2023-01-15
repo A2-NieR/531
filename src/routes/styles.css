@@ -3,7 +3,6 @@
 *::before,
 *::after {
 	box-sizing: border-box;
-	/* background-color: rgba(128, 75, 0, 0.2); */
 }
 
 html {
@@ -38,11 +37,6 @@ main {
 	height: 100%;
 	padding: 4rem 1rem 0;
 	position: relative;
-}
-
-.bx--toast-notification {
-	position: absolute;
-	bottom: 1rem;
 }
 
 .heading {
