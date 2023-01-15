@@ -3,7 +3,6 @@
 *::before,
 *::after {
 	box-sizing: border-box;
-	/* background-color: rgba(128, 75, 0, 0.2); */
 }
 
 html {
@@ -30,8 +29,14 @@ select {
 }
 /* Basic Resets End */
 
+.app {
+	height: 100vh;
+}
+
 main {
+	height: 100%;
 	padding: 4rem 1rem 0;
+	position: relative;
 }
 
 .heading {
@@ -50,7 +55,38 @@ main {
 	margin-right: 1rem;
 }
 
+.modal-form {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 100%;
+}
+
+.btn-center-container {
+	display: flex;
+	justify-content: center;
+	margin: 0 auto 1rem;
+}
+
+td {
+	font-weight: 600;
+}
+
 .bx--data-table-container {
+	margin-bottom: 2rem;
+}
+
+.bx--btn-set {
+	justify-content: center;
+}
+
+.bx--modal-content {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.modal-form > .input-group > .bx--text-input-wrapper {
 	margin-bottom: 2rem;
 }
 

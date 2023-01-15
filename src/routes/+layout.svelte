@@ -1,73 +1,60 @@
 <script lang="ts">
-	import { beforeUpdate, onMount } from 'svelte';
-	import { goto } from '$app/navigation';
-	import {
-		loading,
-		loginStatus,
-		darkMode,
-		weightRecordId,
-		deadlift,
-		squat,
-		benchpress,
-		overheadpress,
-		errorMessage
-	} from '$lib/stores';
-	import pb from '$lib/pb';
+	import { beforeUpdate } from 'svelte';
+	import { browser } from '$app/environment';
+	import { navigating } from '$app/stores';
+	import { toastError, toastSuccess, toastWarning } from '$lib/stores';
 
-	import Header from '$components/Header.svelte';
+	import Header from '$lib/components/Header.svelte';
 	import { Loading, ToastNotification } from 'carbon-components-svelte';
 	import 'carbon-components-svelte/css/all.css';
 	import './styles.css';
 
+	import type { LayoutData } from './$types';
+	export let data: LayoutData;
+
 	beforeUpdate(() => {
-		localStorage.getItem('pocketbase_auth') ? ($loginStatus = true) : ($loginStatus = false);
-
-		window.matchMedia('(prefers-color-scheme: light)').matches
-			? darkMode.set(false)
-			: darkMode.set(true);
-
-		$darkMode === false
-			? document.documentElement.setAttribute('theme', 'white')
-			: document.documentElement.setAttribute('theme', 'g90');
-	});
-
-	onMount(async () => {
-		if ($loginStatus) {
-			try {
-				$loading = false;
-				const list = await pb.collection('weights').getList(1);
-				$weightRecordId = list.items[0].id;
-				const result = await pb.collection('weights').getOne($weightRecordId);
-
-				$deadlift = result.deadlift;
-				$squat = result.squat;
-				$benchpress = result.benchpress;
-				$overheadpress = result.overheadpress;
-			} catch (err: unknown) {
-				$errorMessage = (err as Error).message;
-				setTimeout(() => {
-					$errorMessage = '';
-				}, 3000);
-			}
-		} else {
-			$loading = false;
-			goto('/login');
+		if (browser) {
+			window.matchMedia('(prefers-color-scheme: light)').matches
+				? document.documentElement.setAttribute('theme', 'white')
+				: document.documentElement.setAttribute('theme', 'g90');
 		}
 	});
 </script>
 
 <div class="app">
-	<Header />
-
-	<main>
-		{#if $loading}
-			<Loading />
-		{:else}
+	{#if $navigating !== null}
+		<Loading />
+	{:else}
+		<Header loginStatus={data.user !== undefined} />
+		<main>
 			<slot />
-		{/if}
-
-		{#if $errorMessage.length > 0}
-			<ToastNotification fullWidth kind="error" title="Error" subtitle={$errorMessage} />
-		{/if}
-	</main>
+			<div class="toaster">
+				{#if $toastSuccess.length > 0}
+					<ToastNotification fullWidth lowContrast kind="success" subtitle={$toastSuccess} />
+				{/if}
+				{#if $toastWarning.length > 0}
+					<ToastNotification fullWidth lowContrast kind="warning" subtitle={$toastWarning} />
+				{/if}
+				{#if $toastError.length > 0}
+					<ToastNotification
+						fullWidth
+						lowContrast
+						kind="error"
+						title="Error"
+						subtitle={$toastError}
+					/>
+				{/if}
+			</div>
+		</main>
+	{/if}
 </div>
+
+<style>
+	.toaster {
+		position: absolute;
+		max-width: 100%;
+		top: 4rem;
+		right: 1rem;
+		left: 1rem;
+	}
+</style>

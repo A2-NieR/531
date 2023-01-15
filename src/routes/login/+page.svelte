@@ -1,49 +1,43 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import pb from '$lib/pb';
-	import { errorMessage, loginStatus } from '$lib/stores';
-	import {
-		FluidForm,
-		TextInput,
-		PasswordInput,
-		Button,
-		ToastNotification
-	} from 'carbon-components-svelte';
+	import { applyAction, enhance, type SubmitFunction } from '$app/forms';
+	import { toastError, toastWarning } from '$lib/stores';
+	import { FluidForm, TextInput, PasswordInput, Button } from 'carbon-components-svelte';
 
-	let username: string;
-	let password: string;
-
-	const submitLogin = async (e: { preventDefault: () => void }) => {
-		e.preventDefault();
-		try {
-			await pb.admins.authWithPassword(username, password);
-			$loginStatus = pb.authStore.isValid;
-			if ($loginStatus) {
-				goto('/');
+	const submitLogin: SubmitFunction = () => {
+		return async ({ result }) => {
+			if (result.type === 'redirect') {
+				await applyAction(result);
+			} else if (result.type === 'failure') {
+				$toastWarning = result.data?.message;
+				setTimeout(() => {
+					$toastWarning = '';
+				}, 3000);
+			} else if (result.type === 'error') {
+				$toastError = result.error.message;
+				setTimeout(() => {
+					$toastError = '';
+				}, 3000);
 			}
-		} catch (err: unknown) {
-			$errorMessage = (err as Error).message;
-			setTimeout(() => {
-				$errorMessage = '';
-			}, 3000);
-		}
+		};
 	};
 </script>
 
-<h2>Login</h2>
+<div class="heading">
+	<div class="heading-title">
+		<h2>Login</h2>
+	</div>
+</div>
 
-<FluidForm on:submit={submitLogin}>
-	<TextInput bind:value={username} labelText="Username" required />
-	<PasswordInput bind:value={password} type="password" labelText="Password" required />
-	<Button type="submit">Login</Button>
+<FluidForm>
+	<form method="POST" use:enhance={submitLogin}>
+		<TextInput name="email" labelText="Username" required />
+		<PasswordInput name="password" type="password" labelText="Password" required />
+		<Button type="submit">Login</Button>
+	</form>
 </FluidForm>
 
-{#if $errorMessage.length > 0}
-	<ToastNotification fullWidth kind="error" title="Error" subtitle={$errorMessage} />
-{/if}
-
 <style>
-	h2 {
-		margin-bottom: 2rem;
+	.heading {
+		margin: 2rem 0;
 	}
 </style>
