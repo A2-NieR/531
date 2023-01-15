@@ -4,7 +4,7 @@ import { PUBLIC_BACKEND_URL, PUBLIC_NODE_ENV, PUBLIC_TEST_BACKEND_URL } from '$e
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const backendUrl =
-		PUBLIC_NODE_ENV === 'DEVELOPMENT' ? PUBLIC_TEST_BACKEND_URL : PUBLIC_BACKEND_URL;
+		PUBLIC_NODE_ENV === 'development' ? PUBLIC_TEST_BACKEND_URL : PUBLIC_BACKEND_URL;
 	const pb = new PocketBase(backendUrl);
 	event.locals.pb = pb;
 	event.locals.pb.authStore.loadFromCookie(event.request.headers.get('cookie') || '');

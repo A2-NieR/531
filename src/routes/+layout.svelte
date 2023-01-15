@@ -12,6 +12,7 @@
 	import type { LayoutData } from './$types';
 	export let data: LayoutData;
 
+	//TODO: Seamless theme switching
 	beforeUpdate(() => {
 		if (browser) {
 			window.matchMedia('(prefers-color-scheme: light)').matches
