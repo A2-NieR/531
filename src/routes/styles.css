@@ -90,6 +90,18 @@ td {
 	margin-bottom: 2rem;
 }
 
+.toast-updater > .bx--toast-notification__details > .bx--toast-notification__title {
+	margin-bottom: 1rem;
+}
+
+.toast-updater > .bx--toast-notification__details > .bx--toast-notification__subtitle {
+	margin-bottom: unset;
+}
+
+.toast-updater > .bx--toast-notification__details > button {
+	margin-bottom: 1rem;
+}
+
 /* SideBar Workaround: https://github.com/carbon-design-system/carbon-components-svelte/issues/762#issuecomment-885484991 */
 .bx--side-nav {
 	background-color: var(--cds-ui-background);
