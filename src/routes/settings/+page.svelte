@@ -8,6 +8,7 @@
 	import Edit from 'carbon-icons-svelte/lib/Edit.svelte';
 
 	import type { PageData } from './$types';
+	import { onMount } from 'svelte';
 	export let data: PageData;
 
 	let open = false;
@@ -25,6 +26,15 @@
 		{ id: 'bp', lift: 'Benchpress', orm: '' },
 		{ id: 'oh', lift: 'Overheadpress', orm: '' }
 	];
+
+	onMount(() => {
+		if (data.error) {
+			$toastError = data.error.message;
+			setTimeout(() => {
+				$toastError = '';
+			}, 3000);
+		}
+	});
 
 	const updateWeights: SubmitFunction = () => {
 		return async ({ result, update }) => {

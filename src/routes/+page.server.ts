@@ -56,6 +56,7 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
 		return { cycle: undefined, day: undefined, week: undefined, workout: undefined };
 	} catch (err) {
 		console.error(err);
+		return { error: err as Error };
 	}
 };
 

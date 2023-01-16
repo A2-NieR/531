@@ -16,6 +16,7 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
 		return { weights: undefined };
 	} catch (err) {
 		console.error(err);
+		return { error: err as Error };
 	}
 };
 
