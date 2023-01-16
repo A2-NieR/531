@@ -29,7 +29,7 @@
 </div>
 
 <FluidForm>
-	<form method="POST" use:enhance={submitLogin}>
+	<form method="POST" action="?/login" use:enhance={submitLogin}>
 		<TextInput name="email" labelText="Username" required />
 		<PasswordInput name="password" type="password" labelText="Password" required />
 		<Button type="submit">Login</Button>
