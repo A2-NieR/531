@@ -44,6 +44,7 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
 				}
 			}
 
+			//FIXME: W4D1C1 lower weights?
 			const workout = calculateWeights(cycle, day, {
 				deadlift: maxWeights.deadlift,
 				squat: maxWeights.squat,

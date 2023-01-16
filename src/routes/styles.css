@@ -84,6 +84,10 @@ td {
 	justify-content: center;
 }
 
+.bx--structured-list.bx--structured-list--condensed {
+	margin-bottom: 2.5rem;
+}
+
 .bx--modal-content {
 	display: flex;
 	flex-direction: column;
