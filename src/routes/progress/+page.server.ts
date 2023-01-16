@@ -52,6 +52,6 @@ export const load: PageServerLoad = async ({ locals }) => {
 		};
 	} catch (err) {
 		console.error(err);
+		return { error: err as Error };
 	}
-	return { chartData: [] };
 };

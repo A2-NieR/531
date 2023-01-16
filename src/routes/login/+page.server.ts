@@ -3,7 +3,7 @@ import type { ClientResponseError } from 'pocketbase';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
-	default: async ({ locals, request }) => {
+	login: async ({ locals, request }) => {
 		const data = await request.formData();
 		const email = data.get('email') as string;
 		const password = data.get('password') as string;

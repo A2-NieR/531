@@ -17,6 +17,8 @@
 	import Calendar from 'carbon-icons-svelte/lib/Calendar.svelte';
 	import ChartLine from 'carbon-icons-svelte/lib/ChartLine.svelte';
 	import Settings from 'carbon-icons-svelte/lib/Settings.svelte';
+	import TaskAdd from 'carbon-icons-svelte/lib/TaskAdd.svelte';
+
 	import Play from 'carbon-icons-svelte/lib/Play.svelte';
 	import Pause from 'carbon-icons-svelte/lib/Pause.svelte';
 	import Reset from 'carbon-icons-svelte/lib/Reset.svelte';
@@ -53,6 +55,7 @@
 
 		<HeaderNav>
 			<HeaderNavItem href="/" text="Routine" />
+			<HeaderNavItem href="/assistance" text="Assistance" />
 			<HeaderNavItem href="/progress" text="Progress" />
 			<HeaderNavItem href="/settings" text="Settings" />
 		</HeaderNav>
@@ -60,6 +63,8 @@
 		<SideNav bind:isOpen={isSideNavOpen}>
 			<SideNavItems>
 				<SideNavLink href="/" text="Routine" icon={Calendar} on:click={closeSidebar} />
+				<SideNavDivider />
+				<SideNavLink href="/assistance" text="Assistance" icon={TaskAdd} on:click={closeSidebar} />
 				<SideNavDivider />
 				<SideNavLink href="/progress" text="Progress" icon={ChartLine} on:click={closeSidebar} />
 				<SideNavDivider />

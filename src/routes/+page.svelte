@@ -1,11 +1,12 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { enhance, type SubmitFunction } from '$app/forms';
+	import { toastError, toastSuccess, toastWarning } from '$lib/stores';
 	import type { PageData } from './$types';
 
 	import { Button, ButtonSet, DataTable, Modal, Tag, TextInput } from 'carbon-components-svelte';
 	import Calendar from 'carbon-icons-svelte/lib/Calendar.svelte';
 	import Checkmark from 'carbon-icons-svelte/lib/Checkmark.svelte';
-	import { toastError, toastSuccess, toastWarning } from '$lib/stores';
 
 	export let data: PageData;
 
@@ -59,6 +60,15 @@
 			reps: `${data.workout?.mainLiftTwo.lastSet.reps} x 5`
 		}
 	];
+
+	onMount(() => {
+		if (data.error) {
+			$toastError = data.error.message;
+			setTimeout(() => {
+				$toastError = '';
+			}, 3000);
+		}
+	});
 
 	const submitWorkout: SubmitFunction = () => {
 		return async ({ result, update }) => {

@@ -24,6 +24,12 @@
 
 	let ReloadPrompt: ComponentType;
 	onMount(async () => {
+		if (data.error) {
+			$toastError = data.error.message;
+			setTimeout(() => {
+				$toastError = '';
+			}, 3000);
+		}
 		pwaInfo && (ReloadPrompt = (await import('$lib/components/ReloadPrompt.svelte')).default);
 	});
 

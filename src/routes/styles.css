@@ -72,12 +72,20 @@ td {
 	font-weight: 600 !important;
 }
 
+.bx--data-table-header {
+	padding-top: 0.75rem;
+	padding-bottom: 0.75rem;
+}
 .bx--data-table-container {
 	margin-bottom: 2rem;
 }
 
 .bx--btn-set {
 	justify-content: center;
+}
+
+.bx--structured-list.bx--structured-list--condensed {
+	margin-bottom: 2.5rem;
 }
 
 .bx--modal-content {
