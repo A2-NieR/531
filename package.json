@@ -39,6 +39,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sentry/node": "^7.31.1",
 		"pocketbase": "^0.10.0"
 	},
 	"packageManager": "yarn@1.22.19"

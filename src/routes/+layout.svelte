@@ -30,6 +30,7 @@
 				$toastError = '';
 			}, 3000);
 		}
+		//FIXME: PWA
 		pwaInfo && (ReloadPrompt = (await import('$lib/components/ReloadPrompt.svelte')).default);
 	});
 
