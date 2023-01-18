@@ -6,11 +6,14 @@
 	import { Button, ButtonSet, DataTable, Modal, Slider, TextInput } from 'carbon-components-svelte';
 	import Settings from 'carbon-icons-svelte/lib/Settings.svelte';
 	import Edit from 'carbon-icons-svelte/lib/Edit.svelte';
+	import Locked from 'carbon-icons-svelte/lib/Locked.svelte';
+	import Unlocked from 'carbon-icons-svelte/lib/Unlocked.svelte';
 
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
 	export let data: PageData;
 
+	$: editUnlocked = false;
 	let open = false;
 	let modalHeading = 'Update Weights';
 	let modalContent = 'Edit and save the 1 Rep Max Weights and save them to the Database.';
@@ -109,8 +112,14 @@
 	</svelte:fragment>
 </DataTable>
 
-<div class="btn-center-container">
-	<Button kind="tertiary" icon={Edit} on:click={() => (open = true)}>Edit Weights</Button>
+<div class="btn-container">
+	{#if editUnlocked}
+		<Button kind="tertiary" icon={Edit} on:click={() => (open = true)}>Edit Weights</Button>
+		<Button icon={Unlocked} on:click={() => (editUnlocked = false)} />
+	{:else}
+		<Button kind="tertiary" icon={Edit} disabled>Edit Weights</Button>
+		<Button kind="secondary" icon={Locked} on:click={() => (editUnlocked = true)} />
+	{/if}
 </div>
 
 <div class="slider-container">
@@ -136,6 +145,11 @@
 </form>
 
 <style>
+	.btn-container {
+		display: flex;
+		justify-content: space-evenly;
+		margin: 0 auto 1rem;
+	}
 	.slider-container {
 		margin-bottom: 2rem;
 	}

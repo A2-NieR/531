@@ -202,9 +202,9 @@ export const calculateWeights = (cycle: number, day: number, weights: Weights): 
 
 export const increaseWeights = (currentWeights: Weights): Weights => {
 	return {
-		deadlift: (currentWeights.deadlift += 5),
-		squat: (currentWeights.squat += 5),
-		benchpress: (currentWeights.benchpress += 2.5),
-		overheadpress: (currentWeights.overheadpress += 2.5)
+		deadlift: currentWeights.deadlift + 5,
+		squat: currentWeights.squat + 5,
+		benchpress: currentWeights.benchpress + 2.5,
+		overheadpress: currentWeights.overheadpress + 2.5
 	};
 };

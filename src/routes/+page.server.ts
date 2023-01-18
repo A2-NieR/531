@@ -44,7 +44,6 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
 				}
 			}
 
-			//FIXME: W4D1C1 lower weights?
 			const workout = calculateWeights(cycle, day, {
 				deadlift: maxWeights.deadlift,
 				squat: maxWeights.squat,
@@ -110,7 +109,7 @@ export const actions: Actions = {
 			} else if ((err as ClientResponseError).data?.code === 403) {
 				return error(403, (err as ClientResponseError).data.message);
 			} else {
-				return error(400, err as Error);
+				return error(400, err as App.Error);
 			}
 		}
 	}
