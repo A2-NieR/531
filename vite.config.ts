@@ -32,7 +32,6 @@ const config: UserConfig = {
 					}
 				]
 			},
-			useCredentials: true,
 			devOptions: {
 				enabled: true,
 				type: 'module',
