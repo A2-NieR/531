@@ -9,7 +9,8 @@
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"strict": true,
-		"types": ["vite-plugin-pwa/client"]
+		"types": ["vite-plugin-pwa/client"],
+		"lib": ["ESNext", "DOM", "WebWorker"]
 	},
 	"exclude": ["node_modules"]
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
