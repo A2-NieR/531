@@ -77,7 +77,7 @@
 	.toaster {
 		position: absolute;
 		max-width: 100%;
-		top: 4rem;
+		bottom: 3rem;
 		right: 1rem;
 		left: 1rem;
 	}
