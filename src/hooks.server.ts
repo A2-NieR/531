@@ -5,6 +5,10 @@ import { PUBLIC_BACKEND_URL } from '$env/static/public';
 // import { SENTRY_DSN } from '$env/static/private';
 
 export const handle: Handle = async ({ event, resolve }) => {
+	const loginPath = event.url.pathname.startsWith('/login');
+	const pwaPath =
+		event.url.pathname.endsWith('/sw.js') || event.url.pathname.endsWith('/manifest.webmanifest');
+
 	event.locals.pb = new PocketBase(PUBLIC_BACKEND_URL);
 	event.locals.pb.authStore.loadFromCookie(event.request.headers.get('cookie') || '');
 
@@ -12,7 +16,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	if (event.locals.pb.authStore.isValid) {
 		event.locals.user = structuredClone(event.locals.pb.authStore.model);
-	} else if (!event.url.pathname.startsWith('/login')) {
+	} else if (!loginPath && !pwaPath) {
 		event.locals.pb.authStore.clear();
 		event.locals.user = null;
 		//! without pathname check this will cause infinite redirects
