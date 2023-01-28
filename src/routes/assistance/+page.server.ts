@@ -1,1 +1,1 @@
-export {};
+export const prerender = 'auto';

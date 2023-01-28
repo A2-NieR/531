@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { beforeUpdate, onMount, type ComponentType } from 'svelte';
+	import { beforeUpdate, onMount } from 'svelte';
 	import { pwaInfo } from 'virtual:pwa-info';
 	import { browser } from '$app/environment';
 	import { navigating } from '$app/stores';
@@ -12,6 +12,7 @@
 
 	import type { LayoutData } from './$types';
 	export let data: LayoutData;
+	const updateIntervalInMS = 24 * 60 * 60 * 1000;
 
 	//TODO: Seamless theme switching
 	beforeUpdate(() => {
@@ -22,16 +23,24 @@
 		}
 	});
 
-	let ReloadPrompt: ComponentType;
 	onMount(async () => {
-		if (data.error) {
-			$toastError = data.error.message;
-			setTimeout(() => {
-				$toastError = '';
-			}, 3000);
+		if (pwaInfo) {
+			const { registerSW } = await import('virtual:pwa-register');
+			registerSW({
+				immediate: true,
+				onRegistered(r) {
+					r &&
+						setInterval(() => {
+							console.log('Checking for sw update');
+							r.update();
+						}, updateIntervalInMS);
+					console.log(`SW Registered: ${r}`);
+				},
+				onRegisterError(error) {
+					console.log('SW registration error', error);
+				}
+			});
 		}
-		//FIXME: PWA
-		pwaInfo && (ReloadPrompt = (await import('$lib/components/ReloadPrompt.svelte')).default);
 	});
 
 	$: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : '';
@@ -63,10 +72,6 @@
 						title="Error"
 						subtitle={$toastError}
 					/>
-				{/if}
-
-				{#if ReloadPrompt}
-					<svelte:component this={ReloadPrompt} />
 				{/if}
 			</div>
 		</main>
