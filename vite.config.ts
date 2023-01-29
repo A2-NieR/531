@@ -33,6 +33,7 @@ const config: UserConfig = {
 					}
 				]
 			},
+			kit: {},
 			devOptions: {
 				enabled: true,
 				type: 'module',
