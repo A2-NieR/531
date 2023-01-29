@@ -8,8 +8,6 @@ const config: UserConfig = {
 		SvelteKitPWA({
 			registerType: 'autoUpdate',
 			includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
-			srcDir: './src',
-			filename: 'sw.js',
 			manifest: {
 				name: '5/3/1',
 				short_name: '531',
