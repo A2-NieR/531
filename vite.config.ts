@@ -35,7 +35,7 @@ const config: UserConfig = {
 			},
 			useCredentials: true,
 			workbox: {
-				navigateFallback: '/assistance'
+				navigateFallback: '/pwa'
 			},
 			kit: {},
 			devOptions: {

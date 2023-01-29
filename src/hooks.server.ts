@@ -5,8 +5,8 @@ import { PUBLIC_BACKEND_URL } from '$env/static/public';
 // import { SENTRY_DSN } from '$env/static/private';
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const loginPath = event.url.pathname.startsWith('/login');
-	const pwaPath =
+	const excludePaths = event.url.pathname.endsWith('/login') || event.url.pathname.endsWith('/pwa');
+	const pwaPaths =
 		event.url.pathname.endsWith('/service-worker.js') ||
 		event.url.pathname.endsWith('/manifest.webmanifest');
 
@@ -17,7 +17,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	if (event.locals.pb.authStore.isValid) {
 		event.locals.user = structuredClone(event.locals.pb.authStore.model);
-	} else if (!loginPath && !pwaPath) {
+	} else if (!excludePaths && !pwaPaths) {
 		event.locals.pb.authStore.clear();
 		event.locals.user = null;
 		//! without pathname check this will cause infinite redirects
