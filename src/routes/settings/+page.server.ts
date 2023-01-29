@@ -51,7 +51,7 @@ export const actions: Actions = {
 			} else if ((err as ClientResponseError).data?.code === 404) {
 				return error(404, (err as ClientResponseError).data.message);
 			} else {
-				return error(400, err as Error);
+				return error(400, err as App.Error);
 			}
 		}
 	}

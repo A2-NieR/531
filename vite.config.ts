@@ -33,10 +33,13 @@ const config: UserConfig = {
 					}
 				]
 			},
+			useCredentials: true,
+			workbox: {
+				navigateFallback: '/pwa'
+			},
 			kit: {},
 			devOptions: {
 				enabled: true,
-				type: 'module',
 				navigateFallback: '/'
 			}
 		})
