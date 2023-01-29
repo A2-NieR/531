@@ -7,7 +7,8 @@ import { PUBLIC_BACKEND_URL } from '$env/static/public';
 export const handle: Handle = async ({ event, resolve }) => {
 	const loginPath = event.url.pathname.startsWith('/login');
 	const pwaPath =
-		event.url.pathname.endsWith('/sw.js') || event.url.pathname.endsWith('/manifest.webmanifest');
+		event.url.pathname.endsWith('/service-worker.js') ||
+		event.url.pathname.endsWith('/manifest.webmanifest');
 
 	event.locals.pb = new PocketBase(PUBLIC_BACKEND_URL);
 	event.locals.pb.authStore.loadFromCookie(event.request.headers.get('cookie') || '');
