@@ -33,9 +33,6 @@ const config: UserConfig = {
 					}
 				]
 			},
-			workbox: {
-				globPatterns: ['client/**/*.{html,js,css,ico,jpg,png,svg,webp,woff,woff2}']
-			},
 			devOptions: {
 				enabled: true,
 				type: 'module',
