@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { beforeUpdate, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import { pwaInfo } from 'virtual:pwa-info';
-	import { browser } from '$app/environment';
 	import { navigating } from '$app/stores';
 	import { toastError, toastSuccess, toastWarning } from '$lib/stores';
 
@@ -13,15 +12,6 @@
 	import type { LayoutData } from './$types';
 	export let data: LayoutData;
 	const updateIntervalInMS = 24 * 60 * 60 * 1000;
-
-	//TODO: Seamless theme switching
-	beforeUpdate(() => {
-		if (browser) {
-			window.matchMedia('(prefers-color-scheme: light)').matches
-				? document.documentElement.setAttribute('theme', 'white')
-				: document.documentElement.setAttribute('theme', 'g90');
-		}
-	});
 
 	onMount(async () => {
 		if (pwaInfo) {
