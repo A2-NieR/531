@@ -5,7 +5,8 @@ import { PUBLIC_BACKEND_URL } from '$env/static/public';
 // import { SENTRY_DSN } from '$env/static/private';
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const excludePaths = event.url.pathname.endsWith('/login') || event.url.pathname.endsWith('/pwa');
+	const excludePaths =
+		event.url.pathname.endsWith('/login') || event.url.pathname.endsWith('/offline');
 	const pwaPaths =
 		event.url.pathname.endsWith('/service-worker.js') ||
 		event.url.pathname.endsWith('/manifest.webmanifest');
@@ -15,6 +16,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	event.locals.pb.authStore.isValid && (await event.locals.pb.admins.authRefresh());
 
+	//TODO: Rework login/redirects with landing page for pwa
 	if (event.locals.pb.authStore.isValid) {
 		event.locals.user = structuredClone(event.locals.pb.authStore.model);
 	} else if (!excludePaths && !pwaPaths) {

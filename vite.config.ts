@@ -35,12 +35,12 @@ const config: UserConfig = {
 			},
 			useCredentials: true,
 			workbox: {
-				navigateFallback: '/pwa'
+				navigateFallback: '/offline'
 			},
 			kit: {},
 			devOptions: {
 				enabled: true,
-				navigateFallback: '/'
+				navigateFallback: '/offline'
 			}
 		})
 	],
