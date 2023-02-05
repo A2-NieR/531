@@ -15,6 +15,14 @@
 			window.matchMedia('(prefers-color-scheme: light)').matches
 				? document.documentElement.setAttribute('theme', 'white')
 				: document.documentElement.setAttribute('theme', 'g90');
+
+			window
+				.matchMedia('(prefers-color-scheme: light)')
+				.addEventListener('change', (e) =>
+					e.matches
+						? document.documentElement.setAttribute('theme', 'white')
+						: document.documentElement.setAttribute('theme', 'g90')
+				);
 		</script>
 		%sveltekit.head%
 	</head>
