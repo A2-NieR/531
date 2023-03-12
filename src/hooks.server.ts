@@ -17,7 +17,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.pb.authStore.isValid && (await event.locals.pb.admins.authRefresh());
 
 	//TODO: Rework login/redirects with landing page for pwa
-	if (event.locals.pb.authStore.isValid) {
+	if (event.url.pathname.includes('fallback')) {
+		return resolve(event);
+	} else if (event.locals.pb.authStore.isValid) {
 		event.locals.user = structuredClone(event.locals.pb.authStore.model);
 	} else if (!excludePaths && !pwaPaths) {
 		event.locals.pb.authStore.clear();
