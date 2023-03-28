@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { beforeUpdate, onMount, type ComponentType } from 'svelte';
+	import { onMount } from 'svelte';
 	import { pwaInfo } from 'virtual:pwa-info';
-	import { browser } from '$app/environment';
 	import { navigating } from '$app/stores';
 	import { toastError, toastSuccess, toastWarning } from '$lib/stores';
 
@@ -10,28 +9,27 @@
 	import 'carbon-components-svelte/css/all.css';
 	import './styles.css';
 
-	import type { LayoutData } from './$types';
-	export let data: LayoutData;
+	export let data;
+	const updateIntervalInMS = 24 * 60 * 60 * 1000;
 
-	//TODO: Seamless theme switching
-	beforeUpdate(() => {
-		if (browser) {
-			window.matchMedia('(prefers-color-scheme: light)').matches
-				? document.documentElement.setAttribute('theme', 'white')
-				: document.documentElement.setAttribute('theme', 'g90');
-		}
-	});
-
-	let ReloadPrompt: ComponentType;
 	onMount(async () => {
-		if (data.error) {
-			$toastError = data.error.message;
-			setTimeout(() => {
-				$toastError = '';
-			}, 3000);
+		if (pwaInfo) {
+			const { registerSW } = await import('virtual:pwa-register');
+			registerSW({
+				immediate: true,
+				onRegistered(r) {
+					r &&
+						setInterval(() => {
+							console.log('Checking for sw update');
+							r.update();
+						}, updateIntervalInMS);
+					console.log(`SW Registered: ${r}`);
+				},
+				onRegisterError(error) {
+					console.log('SW registration error', error);
+				}
+			});
 		}
-		//FIXME: PWA
-		pwaInfo && (ReloadPrompt = (await import('$lib/components/ReloadPrompt.svelte')).default);
 	});
 
 	$: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : '';
@@ -64,10 +62,6 @@
 						subtitle={$toastError}
 					/>
 				{/if}
-
-				{#if ReloadPrompt}
-					<svelte:component this={ReloadPrompt} />
-				{/if}
 			</div>
 		</main>
 	{/if}
@@ -77,7 +71,7 @@
 	.toaster {
 		position: absolute;
 		max-width: 100%;
-		top: 4rem;
+		bottom: 3rem;
 		right: 1rem;
 		left: 1rem;
 	}

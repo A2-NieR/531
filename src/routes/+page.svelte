@@ -2,13 +2,12 @@
 	import { onMount } from 'svelte';
 	import { enhance, type SubmitFunction } from '$app/forms';
 	import { toastError, toastSuccess, toastWarning } from '$lib/stores';
-	import type { PageData } from './$types';
 
 	import { Button, ButtonSet, DataTable, Modal, Tag, TextInput } from 'carbon-components-svelte';
 	import Calendar from 'carbon-icons-svelte/lib/Calendar.svelte';
 	import Checkmark from 'carbon-icons-svelte/lib/Checkmark.svelte';
 
-	export let data: PageData;
+	export let data;
 
 	let open = false;
 	let headers = [

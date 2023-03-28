@@ -9,9 +9,8 @@
 	import Locked from 'carbon-icons-svelte/lib/Locked.svelte';
 	import Unlocked from 'carbon-icons-svelte/lib/Unlocked.svelte';
 
-	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
-	export let data: PageData;
+	export let data;
 
 	$: editUnlocked = false;
 	let open = false;

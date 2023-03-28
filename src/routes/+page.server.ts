@@ -1,9 +1,8 @@
 import { calculateWeights, increaseWeights } from '$lib/utils';
-import type { Actions, PageServerLoad } from './$types';
 import type { ClientResponseError } from 'pocketbase';
 import { error, fail } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ locals, parent }) => {
+export const load = async ({ locals, parent }) => {
 	const { weightRecordId } = await parent();
 	let cycle: number;
 	let day: number;
@@ -60,7 +59,7 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
 	}
 };
 
-export const actions: Actions = {
+export const actions = {
 	finishWorkout: async ({ locals, request }) => {
 		const data = await request.formData();
 		const cycle = parseInt(data.get('cycle') as string);

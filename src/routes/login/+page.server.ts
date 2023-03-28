@@ -1,8 +1,7 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { ClientResponseError } from 'pocketbase';
-import type { Actions } from './$types';
 
-export const actions: Actions = {
+export const actions = {
 	login: async ({ locals, request }) => {
 		const data = await request.formData();
 		const email = data.get('email') as string;
@@ -16,7 +15,7 @@ export const actions: Actions = {
 				if ((err as ClientResponseError).data?.code === 400) {
 					return fail(400, { message: (err as ClientResponseError).data.message });
 				} else {
-					return error(400, err as Error);
+					return error(400, err as App.Error);
 				}
 			}
 			throw redirect(303, '/');

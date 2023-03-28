@@ -3,12 +3,11 @@
 	import { LineChart } from '@carbon/charts-svelte';
 	import { toastError } from '$lib/stores';
 	import ChartLine from 'carbon-icons-svelte/lib/ChartLine.svelte';
-	import type { PageServerData } from './$types';
 	import type { LineChartOptions, ScaleTypes } from '@carbon/charts/interfaces';
 	import '@carbon/styles/css/styles.css';
 	import '@carbon/charts/styles.css';
 
-	export let data: PageServerData;
+	export let data;
 
 	//TODO: Select year/month
 

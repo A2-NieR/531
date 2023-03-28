@@ -1,6 +1,4 @@
-import type { PageServerLoad } from './$types';
-
-export const load: PageServerLoad = async ({ locals }) => {
+export const load = async ({ locals }) => {
 	try {
 		const weekList = await locals.pb.collection('weeks').getFullList(undefined, {
 			sort: '-created'
