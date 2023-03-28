@@ -1,8 +1,7 @@
 import { redirect, type Handle, type HandleServerError } from '@sveltejs/kit';
 import PocketBase from 'pocketbase';
 // import * as Sentry from '@sentry/node';
-import { PUBLIC_BACKEND_URL } from '$env/static/public';
-// import { SENTRY_DSN } from '$env/static/private';
+import { BACKEND_URL, SENTRY_DSN } from '$env/static/private';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const excludePaths =
@@ -11,7 +10,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.url.pathname.endsWith('/service-worker.js') ||
 		event.url.pathname.endsWith('/manifest.webmanifest');
 
-	event.locals.pb = new PocketBase(PUBLIC_BACKEND_URL);
+	event.locals.pb = new PocketBase(BACKEND_URL);
 	event.locals.pb.authStore.loadFromCookie(event.request.headers.get('cookie') || '');
 
 	event.locals.pb.authStore.isValid && (await event.locals.pb.admins.authRefresh());
