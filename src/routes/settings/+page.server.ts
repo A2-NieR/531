@@ -1,8 +1,7 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { ClientResponseError } from 'pocketbase';
-import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals, parent }) => {
+export const load = async ({ locals, parent }) => {
 	const { weightRecordId } = await parent();
 
 	try {
@@ -20,7 +19,7 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
 	}
 };
 
-export const actions: Actions = {
+export const actions = {
 	logout: ({ locals }) => {
 		locals.pb.authStore.clear();
 		locals.user = null;

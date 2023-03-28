@@ -9,8 +9,7 @@
 	import 'carbon-components-svelte/css/all.css';
 	import './styles.css';
 
-	import type { LayoutData } from './$types';
-	export let data: LayoutData;
+	export let data;
 	const updateIntervalInMS = 24 * 60 * 60 * 1000;
 
 	onMount(async () => {
