@@ -8,6 +8,9 @@ const config: UserConfig = {
 	},
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
+	},
+	define: {
+		'process.env.NODE_ENV': '"production"'
 	}
 };
 

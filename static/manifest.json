@@ -1,0 +1,38 @@
+{
+	"name": "5/3/1 Workout Companion App",
+	"short_name": "5/3/1",
+	"start_url": "/",
+	"display": "standalone",
+	"description": "App for the 5/3/1 Workout",
+	"theme_color": "#fff",
+	"background_color": "#fff",
+	"orientation": "any",
+	"icons": [
+		{
+			"src": "./manifest-icon-192.maskable.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "./manifest-icon-192.maskable.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "maskable"
+		}
+	],
+	"shortcuts": [
+		{
+			"name": "Progress",
+			"url": "/progress"
+		},
+		{
+			"name": "Assistance Exercises",
+			"url": "/assistance"
+		},
+		{
+			"name": "Settings",
+			"url": "/settings"
+		}
+	]
+}
