@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { pwaInfo } from 'virtual:pwa-info';
 	import { navigating } from '$app/stores';
 	import { toastError, toastSuccess, toastWarning } from '$lib/stores';
 
@@ -10,34 +8,7 @@
 	import './styles.css';
 
 	export let data;
-	const updateIntervalInMS = 24 * 60 * 60 * 1000;
-
-	onMount(async () => {
-		if (pwaInfo) {
-			const { registerSW } = await import('virtual:pwa-register');
-			registerSW({
-				immediate: true,
-				onRegistered(r) {
-					r &&
-						setInterval(() => {
-							console.log('Checking for sw update');
-							r.update();
-						}, updateIntervalInMS);
-					console.log(`SW Registered: ${r}`);
-				},
-				onRegisterError(error) {
-					console.log('SW registration error', error);
-				}
-			});
-		}
-	});
-
-	$: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 </script>
-
-<svelte:head>
-	{@html webManifest}
-</svelte:head>
 
 <div class="app">
 	{#if $navigating !== null}

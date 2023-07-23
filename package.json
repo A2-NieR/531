@@ -19,7 +19,6 @@
 		"@sveltejs/kit": "1.14.0",
 		"@typescript-eslint/eslint-plugin": "^5.57.0",
 		"@typescript-eslint/parser": "^5.57.0",
-		"@vite-pwa/sveltekit": "^0.2.1",
 		"carbon-components-svelte": "^0.73.5",
 		"carbon-icons-svelte": "^11.4.0",
 		"carbon-preprocess-svelte": "^0.9.1",
@@ -34,7 +33,8 @@
 		"tslib": "^2.5.0",
 		"typescript": "^5.0.2",
 		"vite": "^4.2.1",
-		"vitest": "^0.29.8"
+		"vitest": "^0.29.8",
+		"workbox-precaching": "^6.5.4"
 	},
 	"type": "module",
 	"dependencies": {
