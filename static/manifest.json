@@ -4,8 +4,8 @@
 	"start_url": "/",
 	"display": "standalone",
 	"description": "App for the 5/3/1 Workout",
-	"theme_color": "#fff",
-	"background_color": "#fff",
+	"theme_color": "#000",
+	"background_color": "#000",
 	"orientation": "any",
 	"icons": [
 		{
