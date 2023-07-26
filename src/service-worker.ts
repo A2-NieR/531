@@ -14,6 +14,8 @@ const ASSETS = [
 	...files // everything in `static`
 ];
 
+const FALLBACK_ROUTE = '/offline';
+
 sw.addEventListener('install', (event) => {
 	// Create a new cache and add all files to it
 	async function addFilesToCache() {
@@ -59,7 +61,12 @@ sw.addEventListener('fetch', (event) => {
 
 			return response;
 		} catch {
-			return cache.match(event.request);
+			const offlineResponse = await cache.match(FALLBACK_ROUTE);
+			if (offlineResponse) {
+				return offlineResponse;
+			}
+
+			return new Response('You are offline', { headers: { 'Content-Type': 'text/plain' } });
 		}
 	}
 
